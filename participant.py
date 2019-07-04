@@ -4,7 +4,7 @@ import os
 from decimal import Decimal
 from rates import Rate
 from interruption import Interruptions
-
+from data_point import DataPoint
 
 class Participant:
 
@@ -15,8 +15,9 @@ class Participant:
         self.gender = gender
         self.rates = []
         self.interruptions = []
+        self.data_points=[]
         self.set_rates(path_of_logs)
-        self.path_of_snapshots=""
+        self.path_of_snapshots = ""
 
     # This function is for setting path of snapshots
     def set_path_of_snapshots(self, path_of_snapshots):
@@ -92,6 +93,10 @@ class Participant:
                 continue
             else:
                 continue
+
+    def set_data_points(self):
+        for rate in self.rates:
+            tmp_data_point=Da
 
     # This function find values of engagement or challenge in a line of pallete log.
     @staticmethod
