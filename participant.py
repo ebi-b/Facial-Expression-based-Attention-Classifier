@@ -5,6 +5,7 @@ from decimal import Decimal
 from rates import Rate
 from interruption import Interruptions
 
+
 class Participant:
 
     def __init__(self, number, date, age, gender, path_of_logs):
@@ -15,8 +16,13 @@ class Participant:
         self.rates = []
         self.interruptions = []
         self.set_rates(path_of_logs)
+        self.path_of_snapshots=""
 
-    #This function set user engagement and challenge inputs in Participant Object
+    # This function is for setting path of snapshots
+    def set_path_of_snapshots(self, path_of_snapshots):
+        self.path_of_snapshots= path_of_snapshots
+
+    # This function set user engagement and challenge inputs in Participant Object
     def set_rates(self, path):
         lastInteruptionTimeStamp=""
         lastChallengeTimeStamp=""
@@ -87,7 +93,7 @@ class Participant:
             else:
                 continue
 
-    #This function find values of engagement or challenge in a line of pallete log.
+    # This function find values of engagement or challenge in a line of pallete log.
     @staticmethod
     def find_value(s):
         j1 = s.split('{')
@@ -106,7 +112,7 @@ class Participant:
         decimal_time = decimal_time / 1000
         return str(decimal_time)
 
-    #This function map the values of logs to real values.
+    # This function map the values of logs to real values.
     @staticmethod
     def map_values(sv, t):
         v = float(sv)
