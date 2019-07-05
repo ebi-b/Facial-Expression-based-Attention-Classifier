@@ -51,6 +51,6 @@ class Openface:
                     au_c_array.append(au_c)
                     au_r_array.append(au_r)
                     line_count += 1
-        self.au_r_array=au_r_array
-        self.au_c_array=au_c_array
+        self.au_r_array = au_r_array
+        self.au_c_array = au_c_array
         #return au_r_array, au_c_array
