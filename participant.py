@@ -17,10 +17,11 @@ class Participant:
         self.data_points = []
         self.set_rates(path_of_logs)
         self.path_of_snapshots = ""
+        self.set_data_points()
 
     # This function is for setting path of snapshots
     def set_path_of_snapshots(self, path_of_snapshots):
-        self.path_of_snapshots= path_of_snapshots
+        self.path_of_snapshots = path_of_snapshots
 
     # This function set user engagement and challenge inputs in Participant Object
     def set_rates(self, path):
