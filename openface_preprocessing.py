@@ -8,7 +8,7 @@ import pickle
 from openface_object import Openface
 
 
-class Openface_Processing:
+class Openface_Preprocessing:
 
     def __init__(self, participant, period, margin):
         self.participant = Participant(participant)
@@ -20,7 +20,7 @@ class Openface_Processing:
 
 
     # This function find related frames [based on period and margin] to each data point and copy them in
-    # [self.path_for_saving_datapoint_frames ] for further analysis and return datapoints with setted openface object
+    # [self.path_for_saving_datapoint_frames ] for further analysis and return participant object with setted openface object
     def preparation_for_analysis(self):
         snapshot_files_name = []
         for f in listdir(self.path_of_all_snapshots):
@@ -64,4 +64,7 @@ class Openface_Processing:
             datapoint.set_openface_object(open_face_object)
             #rate.set_number_of_snapshots(number_of_snapshots)
             data_points_with_openface.append(datapoint)
-        return data_points_with_openface
+
+        participant = self.participant
+        participant.set_data_points(data_points_with_openface)
+        return participant

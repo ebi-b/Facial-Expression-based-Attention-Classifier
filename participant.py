@@ -99,6 +99,8 @@ class Participant:
             tmp_data_point = DataPoint(self.number, rate)
             self.data_points.append(tmp_data_point)
 
+    def set_data_point(self, datapoins):
+        self.data_points = datapoins
 
     # This function find values of engagement or challenge in a line of pallete log.
     @staticmethod
