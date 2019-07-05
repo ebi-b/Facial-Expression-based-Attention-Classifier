@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ee7cd93b-089b-436e-8a77-3f8eae2e9c1c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/openface_object.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_point.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_point.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openface.py" beforeDir="false" afterPath="$PROJECT_DIR$/openface_processing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/participant.py" beforeDir="false" afterPath="$PROJECT_DIR$/participant.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openface_object.py" beforeDir="false" afterPath="$PROJECT_DIR$/openface_object.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openface_preprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/openface_preprocessing.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,11 +17,12 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/participant.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="19" column="30" selection-start-line="19" selection-start-column="30" selection-end-line="19" selection-end-column="30" />
+            <state relative-caret-position="474">
+              <caret line="103" selection-start-line="103" selection-end-line="103" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
                 <element signature="e#531#4454#0" />
+                <element signature="e#4969#4997#0" />
                 <element signature="e#4589#4709#0" />
                 <element signature="e#4826#5003#0" />
                 <element signature="e#5116#6168#0" />
@@ -50,25 +49,27 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/openface_processing.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/openface_preprocessing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="22" column="101" selection-start-line="22" selection-start-column="101" selection-end-line="22" selection-end-column="101" />
+            <state relative-caret-position="435">
+              <caret line="68" column="52" selection-start-line="68" selection-start-column="52" selection-end-line="68" selection-end-column="52" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
-                <element signature="e#816#2860#0" />
                 <element signature="e#1061#2641#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/openface_object.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+            <state relative-caret-position="350">
+              <caret line="45" column="20" selection-start-line="45" selection-start-column="20" selection-end-line="45" selection-end-column="20" />
+              <folding>
+                <element signature="e#0#17#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -119,11 +120,12 @@
         <option value="$PROJECT_DIR$/rates.py" />
         <option value="$PROJECT_DIR$/data_point" />
         <option value="$PROJECT_DIR$/openface_features.py" />
-        <option value="$PROJECT_DIR$/participant.py" />
         <option value="$PROJECT_DIR$/openface.py" />
-        <option value="$PROJECT_DIR$/openface_object.py" />
         <option value="$PROJECT_DIR$/data_point.py" />
         <option value="$PROJECT_DIR$/openface_processing.py" />
+        <option value="$PROJECT_DIR$/participant.py" />
+        <option value="$PROJECT_DIR$/openface_preprocessing.py" />
+        <option value="$PROJECT_DIR$/openface_object.py" />
       </list>
     </option>
   </component>
@@ -279,11 +281,26 @@
       <option name="project" value="LOCAL" />
       <updated>1562295471386</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="openface">
+      <created>1562301332079</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1562301332079</updated>
+    </task>
+    <task id="LOCAL-00006" summary="openface">
+      <created>1562301652623</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1562301652623</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25799572" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -349,27 +366,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/participant.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="30" selection-start-line="19" selection-start-column="30" selection-end-line="19" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-            <element signature="e#531#4454#0" />
-            <element signature="e#4589#4709#0" />
-            <element signature="e#4826#5003#0" />
-            <element signature="e#5116#6168#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/openface_object.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data_point.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -377,14 +373,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/openface_processing.py">
+    <entry file="file://$PROJECT_DIR$/participant.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="101" selection-start-line="22" selection-start-column="101" selection-end-line="22" selection-end-column="101" />
+        <state relative-caret-position="474">
+          <caret line="103" selection-start-line="103" selection-end-line="103" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+            <element signature="e#531#4454#0" />
+            <element signature="e#4969#4997#0" />
+            <element signature="e#4589#4709#0" />
+            <element signature="e#4826#5003#0" />
+            <element signature="e#5116#6168#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/openface_preprocessing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="68" column="52" selection-start-line="68" selection-start-column="52" selection-end-line="68" selection-end-column="52" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
-            <element signature="e#816#2860#0" />
             <element signature="e#1061#2641#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/openface_object.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="45" column="20" selection-start-line="45" selection-start-column="20" selection-end-line="45" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
           </folding>
         </state>
       </provider>

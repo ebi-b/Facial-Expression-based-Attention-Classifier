@@ -20,7 +20,7 @@ class Openface_Preprocessing:
 
 
     # This function find related frames [based on period and margin] to each data point and copy them in
-    # [self.path_for_saving_datapoint_frames ] for further analysis and return participant object with setted openface object
+    # [self.path_for_saving_datapoint_frames ] for further analysis and return participants with setted openface object
     def preparation_for_analysis(self):
         snapshot_files_name = []
         for f in listdir(self.path_of_all_snapshots):
@@ -66,5 +66,5 @@ class Openface_Preprocessing:
             data_points_with_openface.append(datapoint)
 
         participant = self.participant
-        participant.set_data_points(data_points_with_openface)
+        participant.set_data_points(datapoint.rate, data_points_with_openface)
         return participant
