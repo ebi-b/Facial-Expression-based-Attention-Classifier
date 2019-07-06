@@ -1,10 +1,16 @@
 import array
-import csv
+from participant import Participant
+from os import listdir
+from os.path import isfile, join
+from shutil import copyfile
+from openface_object import Openface
 import os
 from decimal import Decimal
 from rates import Rate
 from interruption import Interruptions
 from data_point import DataPoint
+
+
 class Participant:
 
     def __init__(self, number, date, age, gender, path_of_logs):
@@ -16,12 +22,12 @@ class Participant:
         self.interruptions = []
         self.data_points = []
         self.set_rates(path_of_logs)
-        self.path_of_snapshots = ""
+        self.path_of_participant_snapshots = ""
         self.set_data_points()
 
     # This function is for setting path of snapshots
-    def set_path_of_snapshots(self, path_of_snapshots):
-        self.path_of_snapshots = path_of_snapshots
+    def set_path_of_participant_snapshots(self, path_of_snapshots):
+        self.path_of_participant_snapshots = path_of_snapshots
 
     # This function set user engagement and challenge inputs in Participant Object
     def set_rates(self, path):
@@ -102,6 +108,8 @@ class Participant:
     def set_data_point(self, datapoins):
         self.data_points = datapoins
 
+    #def run_openface(self):
+
     # This function find values of engagement or challenge in a line of pallete log.
     @staticmethod
     def find_value(s):
@@ -152,3 +160,52 @@ class Participant:
 
         realValue = minIndex * 5
         return realValue
+
+    # This function find related frames [based on period and margin] to each data point and copy them in
+    # [self.path_for_saving_datapoint_frames ] for further analysis and return participants with setted openface object
+    def preparation_for_analysis(self, period, margin, path_for_saving_datapoint_frames, ):
+        snapshot_files_name = []
+        for f in listdir(self.path_of_participant_snapshots):
+            if isfile(join(self.path_of_participant_snapshots, f)):
+                snapshot_files_name.append(f)
+
+        data_points_with_openface = []
+        for datapoint in self.data_points:
+            rate = datapoint.rate
+            print("Point: " + str(rate.timestamp))
+            number_of_snapshots = 0
+            start_time_stamp = rate.timestamp - period
+            end_time_stamp = rate.timestamp - margin
+            folder_path = ""
+            try:
+                folder_path = str(path_for_saving_datapoint_frames + "\\" + str(self.number) + "\\"
+                                  + str(rate.timestamp))
+                if not os.path.exists(folder_path):
+                    os.makedirs(folder_path)
+                #datapoint..set_webcam_snapshots_for_path(folder_path)
+
+            except OSError:
+                print("Creation of the directory %s failed" % folder_path)
+                print(OSError.strerror())
+            else:
+                print("Successfully created the directory %s " % folder_path)
+            # Here we copy snapshots in destination directories
+            snapshot_files_timestamp = []
+            for name in snapshot_files_name:
+                tmp = name.replace(".jpg", "")
+                snapshot_files_timestamp.append(float(tmp))
+                print("File: " + tmp)
+
+            for t in snapshot_files_timestamp:
+                if start_time_stamp < t < end_time_stamp:
+                    src = str(self.path_of_participant_snapshots + "\\" + str(t) + ".jpg")
+                    dst = str(folder_path + "\\" + str(t) + ".jpg")
+                    copyfile(src, dst)
+                    number_of_snapshots = number_of_snapshots + 1
+
+            open_face_object = Openface(folder_path)
+            datapoint.set_openface_object(open_face_object)
+            # rate.set_number_of_snapshots(number_of_snapshots)
+            data_points_with_openface.append(datapoint)
+
+        self.data_points = data_points_with_openface
