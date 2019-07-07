@@ -11,6 +11,8 @@ class Openface:
         self.path_of_frames = path_of_frames
         self.rate = rate
         self.dst_dir = "Y:\\Openface Processed Frames\\Folder of CSVc"
+        self.extract_csv()
+        self.openface_csv_read()
 
     def extract_csv(self):
         path = self.path_of_frames
@@ -114,3 +116,4 @@ class Openface:
         self.eye_gaze_direction_array = eye_gaze_direction_array
         self.gaze_angle_array = gaze_angle_array
         print(pose_R_array)
+

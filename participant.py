@@ -1,5 +1,4 @@
 import array
-from participant import Participant
 from os import listdir
 from os.path import isfile, join
 from shutil import copyfile
@@ -23,7 +22,7 @@ class Participant:
         self.data_points = []
         self.set_rates(path_of_logs)
         self.path_of_participant_snapshots = ""
-        self.set_data_points()
+        self.generate_data_points()
 
     # This function is for setting path of snapshots
     def set_path_of_participant_snapshots(self, path_of_snapshots):
@@ -100,15 +99,13 @@ class Participant:
             else:
                 continue
 
-    def set_data_points(self):
+    def generate_data_points(self):
         for rate in self.rates:
             tmp_data_point = DataPoint(self.number, rate)
             self.data_points.append(tmp_data_point)
 
     def set_data_point(self, datapoins):
         self.data_points = datapoins
-
-    #def run_openface(self):
 
     # This function find values of engagement or challenge in a line of pallete log.
     @staticmethod
@@ -162,8 +159,8 @@ class Participant:
         return realValue
 
     # This function find related frames [based on period and margin] to each data point and copy them in
-    # [self.path_for_saving_datapoint_frames ] for further analysis and return participants with setted openface object
-    def preparation_for_analysis(self, period, margin, path_for_saving_datapoint_frames, ):
+    # [self.path_for_saving_datapoint_frames ] for further analysis and return participants with setted openface object[including CSVs and all features set]
+    def preparation_for_facial_expression_analysis(self, period, margin, path_for_saving_datapoint_frames, ):
         snapshot_files_name = []
         for f in listdir(self.path_of_participant_snapshots):
             if isfile(join(self.path_of_participant_snapshots, f)):
