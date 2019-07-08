@@ -162,47 +162,50 @@ class Participant:
     # [self.path_for_saving_datapoint_frames ] for further analysis and return participants with setted openface object[including CSVs and all features set]
     def preparation_for_facial_expression_analysis(self, period, margin, path_for_saving_datapoint_frames, ):
         snapshot_files_name = []
-        for f in listdir(self.path_of_participant_snapshots):
-            if isfile(join(self.path_of_participant_snapshots, f)):
-                snapshot_files_name.append(f)
+        if len(listdir(self.path_of_participant_snapshots)) == 0:
+            print("ALERT: Directory " + self.path_of_participant_snapshots+ " is EMPTY.")
+        else:
+            for f in listdir(self.path_of_participant_snapshots):
+                if isfile(join(self.path_of_participant_snapshots, f)):
+                    snapshot_files_name.append(f)
 
-        data_points_with_openface = []
-        for datapoint in self.data_points:
-            rate = datapoint.rate
-            print("Point: " + str(rate.timestamp))
-            number_of_snapshots = 0
-            start_time_stamp = rate.timestamp - period
-            end_time_stamp = rate.timestamp - margin
-            folder_path = ""
-            try:
-                folder_path = str(path_for_saving_datapoint_frames + "\\" + str(self.number) + "\\"
-                                  + str(rate.timestamp))
-                if not os.path.exists(folder_path):
-                    os.makedirs(folder_path)
-                #datapoint..set_webcam_snapshots_for_path(folder_path)
+            data_points_with_openface = []
+            for datapoint in self.data_points:
+                rate = datapoint.rate
+                print("Point: " + str(rate.timestamp))
+                number_of_snapshots = 0
+                start_time_stamp = rate.timestamp - period
+                end_time_stamp = rate.timestamp - margin
+                folder_path = ""
+                try:
+                    folder_path = str(path_for_saving_datapoint_frames + "\\" + str(self.number) + "\\"
+                                      + str(rate.timestamp))
+                    if not os.path.exists(folder_path):
+                        os.makedirs(folder_path)
+                    #datapoint..set_webcam_snapshots_for_path(folder_path)
 
-            except OSError:
-                print("Creation of the directory %s failed" % folder_path)
-                print(OSError.strerror())
-            else:
-                print("Successfully created the directory %s " % folder_path)
-            # Here we copy snapshots in destination directories
-            snapshot_files_timestamp = []
-            for name in snapshot_files_name:
-                tmp = name.replace(".jpg", "")
-                snapshot_files_timestamp.append(float(tmp))
-                print("File: " + tmp)
+                except OSError:
+                    print("Creation of the directory %s failed" % folder_path)
+                    print(OSError.strerror())
+                else:
+                    print("Successfully created the directory %s " % folder_path)
+                # Here we copy snapshots in destination directories
+                snapshot_files_timestamp = []
+                for name in snapshot_files_name:
+                    tmp = name.replace(".jpg", "")
+                    snapshot_files_timestamp.append(float(tmp))
+                    #print("File: " + tmp)
 
-            for t in snapshot_files_timestamp:
-                if start_time_stamp < t < end_time_stamp:
-                    src = str(self.path_of_participant_snapshots + "\\" + str(t) + ".jpg")
-                    dst = str(folder_path + "\\" + str(t) + ".jpg")
-                    copyfile(src, dst)
-                    number_of_snapshots = number_of_snapshots + 1
+                for t in snapshot_files_timestamp:
+                    if start_time_stamp < t < end_time_stamp:
+                        src = str(self.path_of_participant_snapshots + "\\" + str(t) + ".jpg")
+                        dst = str(folder_path + "\\" + str(t) + ".jpg")
+                        copyfile(src, dst)
+                        number_of_snapshots = number_of_snapshots + 1
 
-            open_face_object = Openface(folder_path)
-            datapoint.set_openface_object(open_face_object)
-            # rate.set_number_of_snapshots(number_of_snapshots)
-            data_points_with_openface.append(datapoint)
+                open_face_object = Openface(datapoint.rate, folder_path)
+                datapoint.set_openface_object(open_face_object)
+                # rate.set_number_of_snapshots(number_of_snapshots)
+                data_points_with_openface.append(datapoint)
 
-        self.data_points = data_points_with_openface
+            self.data_points = data_points_with_openface

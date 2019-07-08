@@ -15,8 +15,9 @@ class Openface:
         self.openface_csv_read()
 
     def extract_csv(self):
+        print("Extracting Openface CSVs...")
         path = self.path_of_frames
-        print("Path is : " + str(path))
+        #print("Path is : " + str(path))
 
         # print(path)
         cmd = "cd OpenFace_2.0.5_win_x64 && FeatureExtraction.exe -fdir " + path
@@ -31,6 +32,7 @@ class Openface:
             self.csv_path = dst
 
     def openface_csv_read(self):
+        print("Reading Openface CSVs...")
         with open(self.csv_path) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             line_count = 0
