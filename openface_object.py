@@ -6,13 +6,14 @@ from shutil import copyfile
 
 class Openface:
 
-    def __init__(self, rate, path_of_frames):
+    def __init__(self, rate, path_of_frames, participant_number):
         print("openface object is created...")
         self.path_of_frames = path_of_frames
         self.rate = rate
-        self.dst_dir = "Y:\\Openface Processed Frames\\Folder of CSVc"
+        self.dst_dir = "Y:\\Openface_Processed_Frames\\Folder_of_CSVc"+str(participant_number)
         self.extract_csv()
         self.openface_csv_read()
+        self.participant_number = participant_number
 
     def extract_csv(self):
         print("Extracting Openface CSVs...")
@@ -22,7 +23,7 @@ class Openface:
         # print(path)
         cmd = "cd OpenFace_2.0.5_win_x64 && FeatureExtraction.exe -fdir " + path
         subprocess.call(cmd, shell=True)
-        src = "OpenFace_2.0.5_;win_x64/processed/" + str(self.rate.timestamp) + ".csv"
+        src = "OpenFace_2.0.5_;win_x64\\processed\\" + str(self.rate.timestamp) + ".csv"
 
         if not os.path.exists(self.dst_dir):
             os.makedirs(self.dst_dir)
