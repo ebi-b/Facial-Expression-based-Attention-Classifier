@@ -22,7 +22,7 @@ def set_participants():
     #p19 = Participant(19, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\19")
     #p20 = Participant(20, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\20")
 
-    p9.set_path_of_snapshots("Y:\Webcam Snapshots\9\webcamSnapshot")
+    p9.set_path_of_snapshots("C:\Webcam Snapshots\webcamSnapshot-9")
     #p6.set_path_of_snapshots()
     #p7.set_path_of_snapshots()
     #p8.set_path_of_snapshots()
@@ -63,5 +63,6 @@ def check_rates(participants):
 def main():
     participants = set_participants()
     for participant in participants:
+        print("Starting Analysis on participant number "+participant.number)
         participant.preparation_for_facial_expression_analysis(period=195, margin=15,
                                                                     path_for_saving_datapoint_frames= "Y:\\Openface Processed Frames\\Folders of Datapoints Frames")
