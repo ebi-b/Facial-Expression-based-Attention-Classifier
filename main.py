@@ -1,4 +1,5 @@
 from participant import Participant
+import pickle
 from openface_preprocessing import Openface_Preprocessing
 
 
@@ -65,7 +66,14 @@ def main():
     for participant in participants:
         print("### Starting Analysis on participant number "+str(participant.number)+" ...")
         participant.preparation_for_facial_expression_analysis(period=195, margin=15,
-          path_for_saving_datapoint_frames= "Y:\\Openface_Processed_Frames\\Folders_of_Datapoints_Frames")
+          path_for_saving_datapoint_frames = "Y:\\Openface_Processed_Frames\\Folders_of_Datapoints_Frames")
+
+        #for datapoint in participant.data_points:
+        #   print(datapoint.openface_object.to_string())
+
+    filehandler = open("Y:\\Openface_Processed_Frames\\Participant_objects\\" + str(participant.number) + ".obj", 'wb')
+    pickle.dump(participant, filehandler)
+
 
 if __name__== "__main__":
     main()

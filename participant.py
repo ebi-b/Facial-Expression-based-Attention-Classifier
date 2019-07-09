@@ -203,7 +203,7 @@ class Participant:
                         copyfile(src, dst)
                         number_of_snapshots = number_of_snapshots + 1
 
-                open_face_object = Openface(datapoint.rate, folder_path)
+                open_face_object = Openface(datapoint.rate, folder_path, datapoint.participant_number)
                 datapoint.set_openface_object(open_face_object)
                 # rate.set_number_of_snapshots(number_of_snapshots)
                 data_points_with_openface.append(datapoint)
