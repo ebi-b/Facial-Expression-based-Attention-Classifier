@@ -112,7 +112,7 @@ class Openface:
                     transition_s = row[643:645]
 
                     non_rigid_shape_parameters_s = row[645:679]
-                    print(non_rigid_shape_parameters_s, '\n')
+                    #print(non_rigid_shape_parameters_s, '\n')
 
                     eye_0_gaze_direction_x_t = row[5]
                     eye_0_gaze_direction_y_t = row[6]

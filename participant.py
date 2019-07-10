@@ -8,7 +8,7 @@ from decimal import Decimal
 from rates import Rate
 from interruption import Interruptions
 from data_point import DataPoint
-
+import rarfile
 
 class Participant:
 
@@ -204,6 +204,67 @@ class Participant:
                         number_of_snapshots = number_of_snapshots + 1
 
                 open_face_object = Openface(datapoint.rate, folder_path, datapoint.participant_number)
+                datapoint.set_openface_object(open_face_object)
+                # rate.set_number_of_snapshots(number_of_snapshots)
+                data_points_with_openface.append(datapoint)
+
+            self.data_points = data_points_with_openface
+
+    def preparation_for_facial_expression_analysis_with_rar_file(self, period, margin, path_for_saving_datapoint_frames):
+        snapshot_files_name = []
+        if False:
+            print("ALERT: Directory " + self.path_of_participant_snapshots+ " is EMPTY.")
+        else:
+            # Set to full path of unrar.exe if it is not in PATH
+            rarfile.UNRAR_TOOL = "C:\\Program Files\\WinRAR\\UnRAR.exe"
+            # Set to '\\' to be more compatible with old rarfile
+            rarfile.PATH_SEP = '/'
+
+            snapshot_files_name = []
+            path_of_all_snapshots = self.path_of_participant_snapshots
+            snapshot_files_timestamp = []
+            rf = rarfile.RarFile(path_of_all_snapshots)
+            folder_in_rar=""
+            for f in rf.infolist():
+                if not f.isdir():
+                    #print(f.filename)
+                    s = f.filename.split('/')
+                    folder_in_rar=s[0]
+                    name = s[1].replace(".jpg", "")
+                    snapshot_files_name.append(f.filename)
+                    snapshot_files_timestamp.append(name)
+            #print(snapshot_files_name)
+
+            data_points_with_openface = []
+            for datapoint in self.data_points:
+                rate = datapoint.rate
+                print("Point: " + str(rate.timestamp))
+                number_of_snapshots = 0
+                start_time_stamp = rate.timestamp - period
+                end_time_stamp = rate.timestamp - margin
+                folder_path = ""
+                try:
+                    folder_path = str(path_for_saving_datapoint_frames + "\\" + str(self.number) + "\\"
+                                      + str(rate.timestamp))
+                    if not os.path.exists(folder_path):
+                        os.makedirs(folder_path)
+                    #datapoint..set_webcam_snapshots_for_path(folder_path)
+
+                except OSError:
+                    print("Creation of the directory %s failed" % folder_path)
+                    print(OSError.strerror())
+                else:
+                    print("Successfully created the directory %s " % folder_path)
+                # Here we copy snapshots in destination directories
+                for t in range(len(snapshot_files_timestamp)):
+                    if start_time_stamp < float(snapshot_files_timestamp[t]) < end_time_stamp:
+                        src = str(snapshot_files_name[t])
+                        dst = str(folder_path)
+                        rf.extract(src, dst)
+                        number_of_snapshots = number_of_snapshots + 1
+
+                path_in_rar=folder_path+"\\"+folder_in_rar
+                open_face_object = Openface(datapoint.rate, path_in_rar, datapoint.participant_number)
                 datapoint.set_openface_object(open_face_object)
                 # rate.set_number_of_snapshots(number_of_snapshots)
                 data_points_with_openface.append(datapoint)

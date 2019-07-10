@@ -7,40 +7,56 @@ from openface_preprocessing import Openface_Preprocessing
 def set_participants():
     participants = []
 
-    p9 = Participant(9, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\9")
-    #p6 = Participant(6, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\6")
-    #p7 = Participant(7, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\7")
-    #p8 = Participant(8, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\8")
-    #p9 = Participant(9, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\9")
-    #p10 = Participant(10, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\10")
-    #p11 = Participant(11, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\11")
-    #p13 = Participant(13, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\13")
-    #p14 = Participant(14, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\14")
-    #p15 = Participant(15, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\15")
-    #p16 = Participant(16, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\16")
-    #p17 = Participant(17, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\17")
-    #p18 = Participant(18, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\18")
-    #p19 = Participant(19, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\19")
-    #p20 = Participant(20, "", 25, 'M', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\20")
+    #p5 = Participant(9, "15-3-2019", 26, 'f', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\5")
+    #p6 = Participant(6, "18-3-2019", 33, 'm', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\6")
+    #p7 = Participant(7, "20-3-2019", 31, 'm', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\7")
+    p8 = Participant(8, "21-3-2019", 33, 'f', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\8")
+    #p9 = Participant(9, "29-3-2019", 32, 'm', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\9")
 
-    p9.set_path_of_participant_snapshots("C:\\Webcam Snapshots\\webcamSnapshot-9\\webcamSnapshot")
-    #p6.set_path_of_snapshots()
-    #p7.set_path_of_snapshots()
-    #p8.set_path_of_snapshots()
-    #p9.set_path_of_snapshots()
-    #p10.set_path_of_snapshots()
-    #p11.set_path_of_snapshots()
-    #p13.set_path_of_snapshots()
-    #p14.set_path_of_snapshots()
-    #p15.set_path_of_snapshots()
-    #p16.set_path_of_snapshots()
-    #p17.set_path_of_snapshots()
-    #p18.set_path_of_snapshots()
-    #p19.set_path_of_snapshots()
-    #p20.set_path_of_snapshots()
+    #p10 = Participant(10, "1-4-2019", 27, 'f', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\10")
+    #p11 = Participant(11, "2-4-2019", 28, 'm', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\11")
+    #p12 = Participant(12, "4-3-2019", 27, 'm', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\12")
+    #p14 = Participant(14, "9-4-2019", 27, 'f', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\14")
+    #p15 = Participant(15, "15-4-2019", 32, 'f', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\15")
+    #p16 = Participant(16, "16-4-2019", 34, 'f', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\16")
+    #p17 = Participant(17, "17-5-2019", 34, 'f', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\17")
+    #p18 = Participant(18, "10-5-2019", 27, 'f', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\18")
+    #p19 = Participant(19, "14-5-2019", 33, 'f', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\19")
+    #p20 = Participant(20, "19-5-2019", 32, 'm', "Y:\Git\Facial Expression Analysis\Analysis_on_Dataset\Pallete Logs\\20")
+
+    #p5.set_path_of_participant_snapshots("C:\\Webcam Snapshots\\webcamSnapshot-9\\webcamSnapshot")
+    #p6.set_path_of_participant_snapshots("C:\\Webcam Snapshots\\webcamSnapshot-9\\webcamSnapshot")
+    #p7.set_path_of_participant_snapshots("C:\\Webcam Snapshots\\webcamSnapshot-9\\webcamSnapshot")
+    p8.set_path_of_participant_snapshots("Y:\Webcam Snapshots\8.rar")
+    #p9.set_path_of_participant_snapshots("C:\\Webcam Snapshots\\webcamSnapshot-9\\webcamSnapshot")
+    #p10.set_path_of_participant_snapshots("C:\\Webcam Snapshots\\webcamSnapshot-9\\webcamSnapshot")
+    #p11.set_path_of_participant_snapshots("C:\\Webcam Snapshots\\webcamSnapshot-9\\webcamSnapshot")
+    #p12.set_path_of_participant_snapshots("C:\\Webcam Snapshots\\webcamSnapshot-9\\webcamSnapshot")
+    #p14.set_path_of_participant_snapshots("C:\\Webcam Snapshots\\webcamSnapshot-9\\webcamSnapshot")
+    #p15.set_path_of_participant_snapshots("C:\\Webcam Snapshots\\webcamSnapshot-9\\webcamSnapshot")
+    #p16.set_path_of_participant_snapshots("C:\\Webcam Snapshots\\webcamSnapshot-9\\webcamSnapshot")
+    #p17.set_path_of_participant_snapshots("C:\\Webcam Snapshots\\webcamSnapshot-9\\webcamSnapshot")
+    #p18.set_path_of_participant_snapshots("C:\\Webcam Snapshots\\webcamSnapshot-9\\webcamSnapshot")
+    #p19.set_path_of_participant_snapshots("C:\\Webcam Snapshots\\webcamSnapshot-9\\webcamSnapshot")
+    #p20.set_path_of_participant_snapshots("C:\\Webcam Snapshots\\webcamSnapshot-9\\webcamSnapshot")
 
     #participants.extend([p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20])
-    participants.append(p9)
+    #participants.append(p5)
+    #participants.append(p6)
+    #participants.append(p7)
+    participants.append(p8)
+    #participants.append(p9)
+    #participants.append(p10)
+    #participants.append(p11)
+    #participants.append(p12)
+    #participants.append(p14)
+    #participants.append(p15)
+    #participants.append(p16)
+    #participants.append(p17)
+    #participants.append(p18)
+    #participants.append(p19)
+    #participants.append(p20)
+
     return participants
 
 
@@ -65,8 +81,12 @@ def main():
     participants = set_participants()
     for participant in participants:
         print("### Starting Analysis on participant number "+str(participant.number)+" ...")
-        participant.preparation_for_facial_expression_analysis(period=195, margin=15,
-          path_for_saving_datapoint_frames = "Y:\\Openface_Processed_Frames\\Folders_of_Datapoints_Frames")
+
+        #participant.preparation_for_facial_expression_analysis(period=195, margin=15,
+        #path_for_saving_datapoint_frames = "Y:\\Openface_Processed_Frames\\Folders_of_Datapoints_Frames")
+
+        participant.preparation_for_facial_expression_analysis_with_rar_file(period=195, margin=15,
+        path_for_saving_datapoint_frames = "Y:\\Openface_Processed_Frames\\Folders_of_Datapoints_Frames")
 
         #for datapoint in participant.data_points:
         #   print(datapoint.openface_object.to_string())
@@ -75,5 +95,5 @@ def main():
     pickle.dump(participant, filehandler)
 
 
-if __name__== "__main__":
+if __name__ == "__main__":
     main()
