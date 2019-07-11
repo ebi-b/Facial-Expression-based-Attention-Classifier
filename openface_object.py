@@ -5,38 +5,49 @@ import pickle
 from shutil import copyfile
 from os import listdir
 from os.path import isfile, join
-
+from termcolor import colored
 
 class Openface:
 
     def __init__(self, rate, path_of_frames, participant_number):
         print("openface object is created...")
+        self.participant_number = participant_number
         self.path_of_frames = path_of_frames
         self.rate = rate
         self.snapshot_files_name = []
         self.snapshot_files_timestamp = []
         self.set_frame_name_and_timestamp()
         self.dst_dir = "Y:\\Openface_Processed_Frames\\Folder_of_CSVs"+"\\"+str(participant_number)
+        self.csv_path = ""
         self.extract_csv()
-        self.openface_csv_read()
-        self.participant_number = participant_number
+        if self.csv_path == "":
+            tmpstr = "Folder {0} for Participant {1} is Empty Check it...".format(rate.timestamp,participant_number)
+            print(colored(tmpstr, 'red'))
+        else:
+            self.openface_csv_read()
+
 
     def extract_csv(self):
         print("Extracting Openface CSVs...")
         path = self.path_of_frames
         #print("Path is : " + str(path))
-
-        # print(path)
-        cmd = "cd OpenFace_2.0.5_win_x64 && FeatureExtraction.exe -fdir " + path
-        subprocess.call(cmd, shell=True)
-        src = "OpenFace_2.0.5_win_x64\\processed\\" + str(self.rate.timestamp) + ".csv"
-
-        if not os.path.exists(self.dst_dir):
-            os.makedirs(self.dst_dir)
-        if os.path.exists(src):
-            dst = str(self.dst_dir) +"\\"+str(self.rate.timestamp) + ".csv"
-            copyfile(src, dst)
+        dst = str(self.dst_dir) + "\\" + str(self.rate.timestamp) + ".csv"
+        if os.path.exists(dst):
+            tmpstr="CSV {0} for Participant {1} is already exists".format(self.rate.timestamp,self.participant_number)
             self.csv_path = dst
+            print(colored(tmpstr, 'green'))
+        # print(path)
+        else:
+            cmd = "cd OpenFace_2.0.5_win_x64 && FeatureExtraction.exe -fdir " + path
+            subprocess.call(cmd, shell=True)
+            src = "OpenFace_2.0.5_win_x64\\processed\\" + str(self.rate.timestamp) + ".csv"
+
+            if not os.path.exists(self.dst_dir):
+                os.makedirs(self.dst_dir)
+            if os.path.exists(src):
+                dst = str(self.dst_dir) +"\\"+str(self.rate.timestamp) + ".csv"
+                copyfile(src, dst)
+                self.csv_path = dst
 
     def openface_csv_read(self):
         print("Reading Openface CSVs...")
