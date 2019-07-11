@@ -228,7 +228,7 @@ class Openface:
         for name in self.snapshot_files_name:
             tmp = name.replace(".jpg", "")
             self.snapshot_files_timestamp.append(float(tmp))
-            print("File: " + tmp)
+            #print("File: " + tmp)
 
     def to_string(self):
         return "Participant No : {0}| Timestamp : {1}| len gaze angle array: {3} ".format(self.participant_number, self.rate.timestamp, len(self.gaze_angle_array))

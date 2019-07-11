@@ -162,6 +162,7 @@ class Participant:
     # [self.path_for_saving_datapoint_frames ] for further analysis and return participants with setted openface object[including CSVs and all features set]
     def preparation_for_facial_expression_analysis(self, period, margin, path_for_saving_datapoint_frames, ):
         snapshot_files_name = []
+        set_before = False
         if len(listdir(self.path_of_participant_snapshots)) == 0:
             print("ALERT: Directory " + self.path_of_participant_snapshots+ " is EMPTY.")
         else:
@@ -182,6 +183,7 @@ class Participant:
                                       + str(rate.timestamp))
                     if not os.path.exists(folder_path):
                         os.makedirs(folder_path)
+                    else: set_before = True
                     #datapoint..set_webcam_snapshots_for_path(folder_path)
 
                 except OSError:
@@ -191,17 +193,18 @@ class Participant:
                     print("Successfully created the directory %s " % folder_path)
                 # Here we copy snapshots in destination directories
                 snapshot_files_timestamp = []
-                for name in snapshot_files_name:
-                    tmp = name.replace(".jpg", "")
-                    snapshot_files_timestamp.append(float(tmp))
-                    #print("File: " + tmp)
+                if not set_before:
+                    for name in snapshot_files_name:
+                        tmp = name.replace(".jpg", "")
+                        snapshot_files_timestamp.append(float(tmp))
+                        #print("File: " + tmp)
 
-                for t in snapshot_files_timestamp:
-                    if start_time_stamp < t < end_time_stamp:
-                        src = str(self.path_of_participant_snapshots + "\\" + str(t) + ".jpg")
-                        dst = str(folder_path + "\\" + str(t) + ".jpg")
-                        copyfile(src, dst)
-                        number_of_snapshots = number_of_snapshots + 1
+                    for t in snapshot_files_timestamp:
+                        if start_time_stamp < t < end_time_stamp:
+                            src = str(self.path_of_participant_snapshots + "\\" + str(t) + ".jpg")
+                            dst = str(folder_path + "\\" + str(t) + ".jpg")
+                            copyfile(src, dst)
+                            number_of_snapshots = number_of_snapshots + 1
 
                 open_face_object = Openface(datapoint.rate, folder_path, datapoint.participant_number)
                 datapoint.set_openface_object(open_face_object)
@@ -224,12 +227,12 @@ class Participant:
             path_of_all_snapshots = self.path_of_participant_snapshots
             snapshot_files_timestamp = []
             rf = rarfile.RarFile(path_of_all_snapshots)
-            folder_in_rar=""
+            folder_in_rar = ""
             for f in rf.infolist():
                 if not f.isdir():
                     #print(f.filename)
                     s = f.filename.split('/')
-                    folder_in_rar=s[0]
+                    folder_in_rar = s[0]
                     name = s[1].replace(".jpg", "")
                     snapshot_files_name.append(f.filename)
                     snapshot_files_timestamp.append(name)
@@ -248,6 +251,8 @@ class Participant:
                                       + str(rate.timestamp))
                     if not os.path.exists(folder_path):
                         os.makedirs(folder_path)
+
+
                     #datapoint..set_webcam_snapshots_for_path(folder_path)
 
                 except OSError:
@@ -263,7 +268,9 @@ class Participant:
                         rf.extract(src, dst)
                         number_of_snapshots = number_of_snapshots + 1
 
-                path_in_rar=folder_path+"\\"+folder_in_rar
+                os.rename(str(folder_path + "\\" + folder_in_rar), str(folder_path + "\\" + str(datapoint.rate.timestamp)))
+
+                path_in_rar = folder_path+"\\"+str(datapoint.rate.timestamp)
                 open_face_object = Openface(datapoint.rate, path_in_rar, datapoint.participant_number)
                 datapoint.set_openface_object(open_face_object)
                 # rate.set_number_of_snapshots(number_of_snapshots)

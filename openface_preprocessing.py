@@ -67,6 +67,7 @@ class Openface_Preprocessing:
             #rate.set_number_of_snapshots(number_of_snapshots)
             data_points_with_openface.append(datapoint)
 
+
         participant = self.participant
         participant.set_data_points(data_points_with_openface)
         return participant
