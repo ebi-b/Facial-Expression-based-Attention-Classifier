@@ -218,6 +218,23 @@ class Openface:
                     line_count += 1
 
         # success = []
+        self.au_c_array = au_c_array
+        self.au_r_array = au_r_array
+        self.gaze_angle_array = gaze_angle_array
+        self.eye_gaze_direction_array = eye_gaze_direction_array
+        self.pose_R_array = pose_R_array
+        self.pose_T_array = pose_T_array
+        self.success_array = success_array
+        self.confidence_array = confidence_array
+        self.face_id_array = face_id_array
+        self.eye_2d_landmarks_array = eye_2d_landmarks_array
+        self.eye_3d_landmarks_array = eye_3d_landmarks_array
+        self.face_2d_landmarks_array = face_2d_landmarks_array
+        self.face_3d_landmarks_array = face_3d_landmarks_array
+        self.p_scale_array = p_scale_array
+        self.rotation_array = rotation_array
+        self.transition_array = transition_array
+        self.non_rigid_shape_parameters_array = non_rigid_shape_parameters_array
         # confidence = []
         # face_id = []
         # eye_2d_landmarks = []

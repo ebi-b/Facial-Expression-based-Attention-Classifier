@@ -162,9 +162,12 @@ class Participant:
     # [self.path_for_saving_datapoint_frames ] for further analysis and return participants with setted openface object[including CSVs and all features set]
     def preparation_for_facial_expression_analysis(self, period, margin, path_for_saving_datapoint_frames, ):
         snapshot_files_name = []
+        refinement = True
         set_before = False
-        if len(listdir(self.path_of_participant_snapshots)) == 0:
-            print("ALERT: Directory " + self.path_of_participant_snapshots+ " is EMPTY.")
+        if not refinement:
+            if len(listdir(self.path_of_participant_snapshots)) == 0:
+                print("ALERT: Directory " + self.path_of_participant_snapshots+ " is EMPTY.")
+
         else:
             for f in listdir(self.path_of_participant_snapshots):
                 if isfile(join(self.path_of_participant_snapshots, f)):
