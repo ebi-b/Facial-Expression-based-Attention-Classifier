@@ -195,9 +195,12 @@ class Participant:
                 snapshot_files_timestamp = []
                 if not set_before:
                     for name in snapshot_files_name:
-                        tmp = name.replace(".jpg", "")
-                        snapshot_files_timestamp.append(float(tmp))
-                        #print("File: " + tmp)
+                        try:
+                            tmp = name.replace(".jpg", "")
+                            snapshot_files_timestamp.append(float(tmp))
+                            #print("File: " + tmp)
+                        except:
+                            print("")
 
                     for t in snapshot_files_timestamp:
                         if start_time_stamp < t < end_time_stamp:
