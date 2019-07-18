@@ -14,6 +14,23 @@ class Openface:
         self.participant_number = participant_number
         self.path_of_frames = path_of_frames
         self.rate = rate
+        self.au_c_array = []
+        self.au_r_array = []
+        self.gaze_angle_array = []
+        self.eye_gaze_direction_array = []
+        self.pose_R_array = []
+        self.pose_T_array = []
+        self.success_array = []
+        self.confidence_array = []
+        self.face_id_array = []
+        self.eye_2d_landmarks_array = []
+        self.eye_3d_landmarks_array = []
+        self.face_2d_landmarks_array = []
+        self.face_3d_landmarks_array = []
+        self.p_scale_array = []
+        self.rotation_array = []
+        self.transition_array = []
+        self.non_rigid_shape_parameters_array = []
         self.snapshot_files_name = []
         self.snapshot_files_timestamp = []
         self.set_frame_name_and_timestamp()
