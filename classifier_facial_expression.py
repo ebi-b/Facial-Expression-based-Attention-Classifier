@@ -14,7 +14,8 @@ from sklearn.model_selection import LeaveOneOut
 from sklearn.metrics import average_precision_score
 from sklearn.metrics import  accuracy_score
 import numpy as np
-
+from sklearn.metrics import precision_recall_fscore_support
+import xgboost as xgb
 
 class FacialExpressionClassifier:
 
@@ -41,9 +42,11 @@ class FacialExpressionClassifier:
                     if chal_label !="mr":
                         try:
                             tmp = []
-                            au_c_avg, au_c_std, au_r_avg, au_r_std = self.calculate_metrics(point)
+                            au_c_avg, au_c_std, au_r_avg, au_r_std = self.calculate_metrics(point,100)
                             print("toole au_c_avg is: ", len(au_c_avg))
-                            if len(au_c_avg) != 0:
+                            if sum(au_c_avg) ==0:
+                                print("SUM++00")
+                            if len(au_c_avg) != 0 and sum(au_c_avg) != 0:
                                 eng_labels.append(eng_label)
                                 chal_labels.append(chal_label)
                                 quadrant_labels.append(quadrant_label)
@@ -74,35 +77,69 @@ class FacialExpressionClassifier:
         #kf.get_n_splits(au_cr)
 
 
-        predicted = []
-        real = []
+        predicted_quadran = []
+        real_quadrant = []
+
+        predicted_eng = []
+        real_eng = []
+
+        predicted_chal = []
+        real_chal = []
+
         for train_index, test_index in loo.split(au_cr):
         #for train_index, test_index in kf.split(au_cr):
             #print("TRAIN:", train_index, "TEST:", test_index)
             X_test = []
             X_train = []
-            y_test = []
-            y_train = []
+            quadrant_y_test = []
+            eng_y_test = []
+            chal_y_test = []
+            quadrant_y_train = []
+            eng_y_train = []
+            chal_y_train = []
+
             for j in train_index:
                 X_train.append(au_cr[j])
-                y_train.append(quadrant_labels[j])
+                quadrant_y_train.append(quadrant_labels[j])
+                eng_y_train.append(eng_labels[j])
+                chal_y_train.append(chal_labels[j])
             for k in test_index:
                 X_test.append(au_cr[k])
-                y_test.append(quadrant_labels[k])
+                quadrant_y_test.append(quadrant_labels[k])
+                eng_y_test.append(eng_labels[k])
+                chal_y_test.append(chal_labels[k])
 
-            SVM = svm.LinearSVC()
-            SVM.fit(X_train, y_train)
-            pt=SVM.predict(X_test)
-            predicted.extend(pt)
-            real.extend(y_test)
+            SVM_quadrant = svm.LinearSVC(class_weight='balanced')
+            SVM_quadrant.fit(X_train, quadrant_y_train)
+            pt = SVM_quadrant.predict(X_test)
+            predicted_quadran.extend(pt)
+            real_quadrant.extend(quadrant_y_test)
+
+            SVM_eng = svm.LinearSVC()
+            SVM_eng.fit(X_train, eng_y_train)
+            pt = SVM_eng.predict(X_test)
+            predicted_eng.extend(pt)
+            real_eng.extend(eng_y_test)
+
+            SVM_chal = svm.LinearSVC()
+            SVM_chal.fit(X_train, chal_y_train)
+            pt = SVM_chal.predict(X_test)
+            predicted_chal.extend(pt)
+            real_chal.extend(chal_y_test)
 
         print("Linear")
-        print("Y:", real)
-        print("Predicted:", predicted)
-        accuuracy=accuracy_score(real, predicted)
-        print("Accuracy is: ", accuuracy)
+        print("Y:", real_quadrant)
+        print("Predicted:", predicted_quadran)
+        accuuracy_quadrant = accuracy_score(real_quadrant, predicted_quadran)
+        accuuracy_eng = accuracy_score(real_eng, predicted_eng)
+        accuuracy_chal= accuracy_score(real_chal, predicted_chal)
+        #print(precision_recall_fscore_support(real_quadrant, predicted_quadran))
+        print("Accuracy quadrant is: ", accuuracy_quadrant)
+        print("Accuracy eng is: ", accuuracy_eng)
+        print("Accuracy chal is: ", accuuracy_chal)
 
-
+        self.kernel_classifier(au_cr, quadrant_labels)
+        self.xgboost_classifier(au_cr, quadrant_labels)
 
     def calculate_labels(self, datapoint):
         #print("In set labels...")
@@ -153,19 +190,21 @@ class FacialExpressionClassifier:
         return quadrant_label, engagement_label, challenge_label
         #print("quad label is: ", self.quadrant_label)
 
-    def calculate_metrics(self, point):
+    def calculate_metrics(self, point, period):
         print("Calculating Metrics in processed_data_points for participant {0} and datapoint {1}...".format(point.participant_number, point.rate.timestamp))
         new_array_c = []
         new_array_r = []
         au_c_avg, au_c_std, au_r_avg, au_r_std = [], [], [], []
         if hasattr(point.openface_object, 'au_c_array'):
+            y=0
             for row in point.openface_object.au_c_array:
-                if (sum(row) != 0):
+                if float(point.openface_object.rate.timestamp)-float(point.openface_object.snapshot_files_timestamp[y]) < period:
+                    if (sum(row) != 0):
                         #print("Row is: ",len(row))
                         #print("New array is: ",len(new_array_c))
                         #np.append(new_array_c,[row], axis=0)
-                    new_array_c.append(row)
-
+                        new_array_c.append(row)
+                y+=1
                 #print(new_array_c.s)
             new_array_c = np.array(new_array_c)
             if len(new_array_c) == 0:
@@ -176,11 +215,14 @@ class FacialExpressionClassifier:
                 au_c_avg = new_array_c.mean(axis=0)
                 au_c_std = new_array_c.std(axis=0)
 
-
+            y=0
             for row in point.openface_object.au_r_array:
-                if (sum(row) != 0):
+                if float(point.openface_object.rate.timestamp) - float(
+                        point.openface_object.snapshot_files_timestamp[y]) < period:
+                    if (sum(row) != 0):
                         #np.append(new_array_r,[row], axis=0)
-                    new_array_r.append(row)
+                        new_array_r.append(row)
+                y+=1
             if len(new_array_c) == 0:
                 au_r_avg = np.zeros(17)
                 au_r_std = np.zeros(17)
@@ -201,6 +243,7 @@ class FacialExpressionClassifier:
 
         else:
             return [], [], [], []
+
     @staticmethod
     def load_participants(path):
         participants = []
@@ -209,22 +252,25 @@ class FacialExpressionClassifier:
             participant = pickle.load(file_pi2)
             print("Participant {0} is Loaded.".format(filename))
             participants.append(participant)
+        #filehandler = open("participants.obj", 'wb')
+        #pickle.dump(participants, filehandler)
         return participants
 
     def kernel_classifier(self, au_cr, quadrant_labels):
+        print("Kernel Classifier")
         # Leave One Out
         loo = LeaveOneOut()
         loo.get_n_splits(au_cr)
         # print(loo)
 
         # k-fold
-        # kf = KFold(n_splits = 10)
-        # kf.get_n_splits(au_cr)
+        kf = KFold(n_splits = 10)
+        kf.get_n_splits(au_cr)
 
         predicted = []
         real = []
+        #for train_index, test_index in loo.split(au_cr):
         for train_index, test_index in loo.split(au_cr):
-            # for train_index, test_index in kf.split(au_cr):
             # print("TRAIN:", train_index, "TEST:", test_index)
             X_test = []
             X_train = []
@@ -237,14 +283,66 @@ class FacialExpressionClassifier:
                 X_test.append(au_cr[k])
                 y_test.append(quadrant_labels[k])
 
-            SVM = svm.SVC(gamma='auto')
+            SVM = svm.SVC(gamma='scale', class_weight='balanced')
             SVM.fit(X_train, y_train)
             pt = SVM.predict(X_test)
             predicted.extend(pt)
             real.extend(y_test)
 
-        print("Linear")
         print("Y:", real)
         print("Predicted:", predicted)
         accuuracy = accuracy_score(real, predicted)
         print("Accuracy is: ", accuuracy)
+
+    def xgboost_classifier(self,au_cr, quadrant_labels):
+
+        data_dmatrix = xgb.DMatrix(data=au_cr, label=quadrant_labels)
+        loo = LeaveOneOut()
+        loo.get_n_splits(au_cr)
+        # print(loo)
+
+        # k-fold
+        kf = KFold(n_splits=10)
+        kf.get_n_splits(au_cr)
+
+        predicted = []
+        real = []
+        # for train_index, test_index in loo.split(au_cr):
+        for train_index, test_index in kf.split(au_cr):
+            # print("TRAIN:", train_index, "TEST:", test_index)
+            X_test = []
+            X_train = []
+            y_test = []
+            y_train = []
+            for j in train_index:
+                X_train.append(au_cr[j])
+                y_train.append(quadrant_labels[j])
+            for k in test_index:
+                X_test.append(au_cr[k])
+                y_test.append(quadrant_labels[k])
+
+            X_train = np.array(X_train)
+            X_test = np.array(X_test)
+            y_train = np.array(y_train)
+            y_test = np.array(y_test)
+            #SVM = svm.SVC(gamma='scale', class_weight='balanced')
+            #SVM.fit(X_train, y_train)
+            #pt = SVM.predict(X_test)
+            model = xgb.XGBClassifier(objective='multi:softmax').fit(X_train , y_train)
+            pt = model.predict(X_test)
+
+            predicted.extend(pt)
+            real.extend(y_test)
+
+        print("Y:", real)
+        print("Predicted:", predicted)
+        accuuracy = accuracy_score(real, predicted)
+        print("Accuracy is: ", accuuracy)
+
+    def calculate_gaze_angle_parameters(self, openFaceObject):
+
+        gaze_angle_array = openFaceObject.gaze_angle_array
+        eye_gaze_direction_array = openFaceObject.eye_gaze_direction_array
+
+
+
