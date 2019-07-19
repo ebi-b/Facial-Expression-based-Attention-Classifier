@@ -16,6 +16,7 @@ from sklearn.metrics import  accuracy_score
 import numpy as np
 from sklearn.metrics import precision_recall_fscore_support
 import xgboost as xgb
+import facial_expression_functions as fef
 
 class FacialExpressionClassifier:
 
@@ -23,7 +24,8 @@ class FacialExpressionClassifier:
         self.participants = self.load_participants(path_of_participant_objects)
         self.margin_for_engagement = margin_for_eng
         self.margin_for_challenge = margin_for_challenge
-        self.classification_datapoint_based()
+        #self.classification_datapoint_based()
+        self.test_parameters()
 
 
     def classification_datapoint_based(self):
@@ -42,9 +44,10 @@ class FacialExpressionClassifier:
                     if chal_label !="mr":
                         try:
                             tmp = []
-                            au_c_avg, au_c_std, au_r_avg, au_r_std = self.calculate_metrics(point,100)
+                            au_c_avg, au_c_std, au_r_avg, au_r_std = fef.calculate_action_units_parameters (point, 195)
+                            # gaze_avg_movements, gaze_avg, gaze_std
                             print("toole au_c_avg is: ", len(au_c_avg))
-                            if sum(au_c_avg) ==0:
+                            if sum(au_c_avg) == 0:
                                 print("SUM++00")
                             if len(au_c_avg) != 0 and sum(au_c_avg) != 0:
                                 eng_labels.append(eng_label)
@@ -54,6 +57,9 @@ class FacialExpressionClassifier:
                                 tmp.extend(au_r_std)
                                 tmp.extend(au_c_avg)
                                 tmp.extend(au_c_std)
+                                #tmp.extend(gaze_avg_movements)
+                                #tmp.extend(gaze_avg)
+                                #tmp.extend(gaze_std)
                                 au_cr.append(tmp)
                         except(TypeError):
                             print("Error in participant {0} and timestamp {1}.".format(point.participant_number, point.rate.timestamp))
@@ -190,60 +196,6 @@ class FacialExpressionClassifier:
         return quadrant_label, engagement_label, challenge_label
         #print("quad label is: ", self.quadrant_label)
 
-    def calculate_metrics(self, point, period):
-        print("Calculating Metrics in processed_data_points for participant {0} and datapoint {1}...".format(point.participant_number, point.rate.timestamp))
-        new_array_c = []
-        new_array_r = []
-        au_c_avg, au_c_std, au_r_avg, au_r_std = [], [], [], []
-        if hasattr(point.openface_object, 'au_c_array'):
-            y=0
-            for row in point.openface_object.au_c_array:
-                if float(point.openface_object.rate.timestamp)-float(point.openface_object.snapshot_files_timestamp[y]) < period:
-                    if (sum(row) != 0):
-                        #print("Row is: ",len(row))
-                        #print("New array is: ",len(new_array_c))
-                        #np.append(new_array_c,[row], axis=0)
-                        new_array_c.append(row)
-                y+=1
-                #print(new_array_c.s)
-            new_array_c = np.array(new_array_c)
-            if len(new_array_c) == 0:
-                au_c_avg = np.zeros(18)
-                au_c_std = np.zeros(18)
-                #print("au_c for point {0} of participant {1} is {3}: ".format(point.rate.timestamp,point.participant_number,new_array_c))
-            else:
-                au_c_avg = new_array_c.mean(axis=0)
-                au_c_std = new_array_c.std(axis=0)
-
-            y=0
-            for row in point.openface_object.au_r_array:
-                if float(point.openface_object.rate.timestamp) - float(
-                        point.openface_object.snapshot_files_timestamp[y]) < period:
-                    if (sum(row) != 0):
-                        #np.append(new_array_r,[row], axis=0)
-                        new_array_r.append(row)
-                y+=1
-            if len(new_array_c) == 0:
-                au_r_avg = np.zeros(17)
-                au_r_std = np.zeros(17)
-                    # print("au_c for point {0} of participant {1} is {3}: ".format(point.rate.timestamp,point.participant_number,new_array_c))
-            else:
-
-                new_array_r = np.array(new_array_r)
-                au_r_avg = new_array_r.mean(axis=0)
-                au_r_std = new_array_r.std(axis=0)
-
-                #print("au_c_avg: ", self.au_c_avg)
-                #print("au_r_avg: ", self.au_r_avg)
-                #print("au_c_std: ", self.au_c_std)
-                #print("au_r_std: ", self.au_r_std)
-            #except:
-             #   print("Error in participant {0} and datapoint {1}".format(point.participant_number, point.rate.timestamp))
-            return au_c_avg, au_c_std, au_r_avg, au_r_std
-
-        else:
-            return [], [], [], []
-
     @staticmethod
     def load_participants(path):
         participants = []
@@ -339,10 +291,13 @@ class FacialExpressionClassifier:
         accuuracy = accuracy_score(real, predicted)
         print("Accuracy is: ", accuuracy)
 
-    def calculate_gaze_angle_parameters(self, openFaceObject):
-
-        gaze_angle_array = openFaceObject.gaze_angle_array
-        eye_gaze_direction_array = openFaceObject.eye_gaze_direction_array
-
-
-
+    def test_parameters(self):
+        data_points = []
+        for participant in self.participants:
+            data_points.append(participant.data_points)
+        for i in range(len(data_points)):
+            for point in data_points[i]:
+                        try:
+                            fef.calcualate_facial_expression_parameters(point, 195)
+                        except(TypeError):
+                            print("Error in participant {0} and timestamp {1}.".format(point.participant_number, point.rate.timestamp))
