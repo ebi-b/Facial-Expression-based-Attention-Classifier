@@ -2,7 +2,7 @@ import  numpy as np
 
 
 def calculate_gaze_angle_parameters(point):
-    print("In Calculating gaze Aneles")
+    #print("In Calculating gaze Aneles")
     avg_movement_gaze_angle, gaze_angle_avg,gaze_angle_std = [], [], []
     if hasattr(point.openface_object, 'gaze_angle_array'):
         gaze_angle_array = point.openface_object.gaze_angle_array
@@ -25,11 +25,11 @@ def calculate_gaze_angle_parameters(point):
         gaze_angle_avg = new_gaze_angle_array.mean(axis=0)
         gaze_angle_std = new_gaze_angle_array.std(axis=0)
 
-        print(avg_movement_gaze_angle, gaze_angle_avg, gaze_angle_std)
+        #print(avg_movement_gaze_angle, gaze_angle_avg, gaze_angle_std)
     return avg_movement_gaze_angle, gaze_angle_avg, gaze_angle_std
 
 def calculate_action_units_parameters(point, period):
-        print("Calculating Metrics in processed_data_points for participant {0} and datapoint {1}...".format(point.participant_number, point.rate.timestamp))
+        #print("Calculating Metrics in processed_data_points for participant {0} and datapoint {1}...".format(point.participant_number, point.rate.timestamp))
         new_array_c = []
         new_array_r = []
         au_c_avg, au_c_std, au_r_avg, au_r_std = [], [], [], []
@@ -90,7 +90,7 @@ def calcualate_facial_expression_parameters(point, period):
     gaze_avg_movements, gaze_avg, gaze_std = calculate_gaze_angle_parameters(point.openface_object)
 
 def calculate_pitch_roll_yaw(point):
-    print("Calcualting Pitch, Roll, Yaw.")
+    #print("Calcualting Pitch, Roll, Yaw.")
     avg_movement_pitch_roll_yaw, pitch_roll_yaw_avg, pitch_roll_yaw_std = [], [], []
     if hasattr(point.openface_object, 'pose_R_array'):
         pose_R_array = point.openface_object.pose_R_array
@@ -114,7 +114,7 @@ def calculate_pitch_roll_yaw(point):
     return avg_movement_pitch_roll_yaw, pitch_roll_yaw_avg, pitch_roll_yaw_std
 
 def calculate_head_pose(point):
-    print("Calcualting Head Pose")
+    #print("Calcualting Head Pose")
     avg_movement_head_pose, head_pose_avg, head_pose_std = [], [], []
     if hasattr(point.openface_object, 'pose_T_array'):
         pose_T_array = point.openface_object.pose_T_array

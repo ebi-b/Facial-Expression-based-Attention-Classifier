@@ -19,6 +19,8 @@ import xgboost as xgb
 import facial_expression_functions as fef
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 
 class FacialExpressionClassifier:
 
@@ -130,7 +132,8 @@ class FacialExpressionClassifier:
                 eng_y_test.append(eng_labels[k])
                 chal_y_test.append(chal_labels[k])
 
-            SVM_quadrant = svm.LinearSVC(class_weight='balanced')
+            X_train,X_test = self.pca_transformation(X_train, X_test)
+            SVM_quadrant = svm.LinearSVC(class_weight='balanced', max_iter=5000)
             SVM_quadrant.fit(X_train, quadrant_y_train)
             pt = SVM_quadrant.predict(X_test)
             predicted_quadran.extend(pt)
@@ -251,7 +254,8 @@ class FacialExpressionClassifier:
                 X_test.append(au_cr[k])
                 y_test.append(quadrant_labels[k])
 
-            SVM = svm.SVC(gamma='scale')
+            X_train, X_test = self.pca_transformation(X_train, X_test)
+            SVM = svm.SVC(kernel= 'poly', degree=2, gamma='scale', max_iter=3000)
             SVM.fit(X_train, y_train)
             pt = SVM.predict(X_test)
             predicted.extend(pt)
@@ -296,7 +300,8 @@ class FacialExpressionClassifier:
             #SVM = svm.SVC(gamma='scale', class_weight='balanced')
             #SVM.fit(X_train, y_train)
             #pt = SVM.predict(X_test)
-            model = xgb.XGBClassifier(objective='multi:softmax').fit(X_train , y_train)
+            X_train, X_test = self.pca_transformation(X_train, X_test)
+            model = xgb.XGBClassifier(objective='multi:softmax', max_iter=3000).fit(X_train , y_train)
             pt = model.predict(X_test)
 
             predicted.extend(pt)
@@ -345,6 +350,7 @@ class FacialExpressionClassifier:
                 X_test.append(au_cr[k])
                 y_test.append(quadrant_labels[k])
 
+            X_train, X_test = self.pca_transformation(X_train, X_test)
             model = RandomForestClassifier(n_estimators = 100)
             model.fit(X_train, y_train)
             pt =model.predict(X_test)
@@ -355,3 +361,14 @@ class FacialExpressionClassifier:
         print("Predicted:", predicted)
         accuuracy = accuracy_score(real, predicted)
         print("Accuracy is: ", accuuracy)
+
+    def pca_transformation(self, X_train, X_test ):
+        sc = StandardScaler()
+        X_train = sc.fit_transform(X_train)
+        X_test = sc.transform(X_test)
+
+        pca = PCA(n_components=18)
+        X_train = pca.fit_transform(X_train)
+        X_test = pca.transform(X_test)
+
+        return X_train, X_test
