@@ -1,18 +1,18 @@
 import  numpy as np
 
-@staticmethod
+
 def calculate_gaze_angle_parameters(point):
     print("In Calculating gaze Aneles")
     avg_movement_gaze_angle, gaze_angle_avg,gaze_angle_std = [], [], []
     if hasattr(point.openface_object, 'gaze_angle_array'):
         gaze_angle_array = point.openface_object.gaze_angle_array
-        print(gaze_angle_array)
+       # print(gaze_angle_array)
         eye_gaze_direction_array = point.openface_object.eye_gaze_direction_array
         number = 0
-        dst = np.array([0, 0])
+        dst = np.zeros(2)
         for i in range(1, len(gaze_angle_array)):
             if sum(gaze_angle_array[i]) != 0 and sum(gaze_angle_array[i - 1]) != 0:
-                dst += abs(gaze_angle_array[i] - gaze_angle_array[i - 1])
+                dst += np.absolute(np.array(gaze_angle_array[i]) - np.array(gaze_angle_array[i - 1]))
                 number += 1
         avg_movement_gaze_angle = dst / number
 
@@ -28,7 +28,7 @@ def calculate_gaze_angle_parameters(point):
         print(avg_movement_gaze_angle, gaze_angle_avg, gaze_angle_std)
     return avg_movement_gaze_angle, gaze_angle_avg, gaze_angle_std
 
-@staticmethod
+
 def calculate_action_units_parameters(point, period):
         print("Calculating Metrics in processed_data_points for participant {0} and datapoint {1}...".format(point.participant_number, point.rate.timestamp))
         new_array_c = []
@@ -87,5 +87,8 @@ def calculate_action_units_parameters(point, period):
                 #, [], [], []
 
 def calcualate_facial_expression_parameters(point, period):
-    #au_c_avg, au_c_std, au_r_avg, au_r_std = calculate_action_units_parameters(point,period)
+    au_c_avg, au_c_std, au_r_avg, au_r_std = calculate_action_units_parameters(point,period)
     gaze_avg_movements, gaze_avg, gaze_std = calculate_gaze_angle_parameters(point.openface_object)
+
+def calculate_pitch_roll_yaw(point):
+    print("Calcualting Pitch, Roll, Yaw.")

@@ -17,6 +17,8 @@ import numpy as np
 from sklearn.metrics import precision_recall_fscore_support
 import xgboost as xgb
 import facial_expression_functions as fef
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
 
 class FacialExpressionClassifier:
 
@@ -24,9 +26,8 @@ class FacialExpressionClassifier:
         self.participants = self.load_participants(path_of_participant_objects)
         self.margin_for_engagement = margin_for_eng
         self.margin_for_challenge = margin_for_challenge
-        #self.classification_datapoint_based()
-        self.test_parameters()
-
+        self.classification_datapoint_based()
+        #self.test_parameters()
 
     def classification_datapoint_based(self):
         print("In classification Processing...")
@@ -44,8 +45,9 @@ class FacialExpressionClassifier:
                     if chal_label !="mr":
                         try:
                             tmp = []
-                            au_c_avg, au_c_std, au_r_avg, au_r_std = fef.calculate_action_units_parameters (point, 195)
-                            # gaze_avg_movements, gaze_avg, gaze_std
+                            au_c_avg, au_c_std, au_r_avg, au_r_std = fef.calculate_action_units_parameters(point, 30)
+                            gaze_avg_movements, gaze_avg, gaze_std = fef.calculate_gaze_angle_parameters(point)
+                            #
                             print("toole au_c_avg is: ", len(au_c_avg))
                             if sum(au_c_avg) == 0:
                                 print("SUM++00")
@@ -57,9 +59,9 @@ class FacialExpressionClassifier:
                                 tmp.extend(au_r_std)
                                 tmp.extend(au_c_avg)
                                 tmp.extend(au_c_std)
-                                #tmp.extend(gaze_avg_movements)
-                                #tmp.extend(gaze_avg)
-                                #tmp.extend(gaze_std)
+                                tmp.extend(gaze_avg_movements)
+                                tmp.extend(gaze_avg)
+                                tmp.extend(gaze_std)
                                 au_cr.append(tmp)
                         except(TypeError):
                             print("Error in participant {0} and timestamp {1}.".format(point.participant_number, point.rate.timestamp))
@@ -146,6 +148,7 @@ class FacialExpressionClassifier:
 
         self.kernel_classifier(au_cr, quadrant_labels)
         self.xgboost_classifier(au_cr, quadrant_labels)
+        self.random_forest(au_cr, quadrant_labels)
 
     def calculate_labels(self, datapoint):
         #print("In set labels...")
@@ -235,7 +238,7 @@ class FacialExpressionClassifier:
                 X_test.append(au_cr[k])
                 y_test.append(quadrant_labels[k])
 
-            SVM = svm.SVC(gamma='scale', class_weight='balanced')
+            SVM = svm.SVC(gamma='scale')
             SVM.fit(X_train, y_train)
             pt = SVM.predict(X_test)
             predicted.extend(pt)
@@ -301,3 +304,41 @@ class FacialExpressionClassifier:
                             fef.calcualate_facial_expression_parameters(point, 195)
                         except(TypeError):
                             print("Error in participant {0} and timestamp {1}.".format(point.participant_number, point.rate.timestamp))
+
+    def random_forest(self,au_cr, quadrant_labels):
+        print("random forest")
+        # Leave One Out
+        loo = LeaveOneOut()
+        loo.get_n_splits(au_cr)
+        # print(loo)
+
+        # k-fold
+        kf = KFold(n_splits=10)
+        kf.get_n_splits(au_cr)
+
+        predicted = []
+        real = []
+        # for train_index, test_index in loo.split(au_cr):
+        for train_index, test_index in loo.split(au_cr):
+            # print("TRAIN:", train_index, "TEST:", test_index)
+            X_test = []
+            X_train = []
+            y_test = []
+            y_train = []
+            for j in train_index:
+                X_train.append(au_cr[j])
+                y_train.append(quadrant_labels[j])
+            for k in test_index:
+                X_test.append(au_cr[k])
+                y_test.append(quadrant_labels[k])
+
+            model = RandomForestClassifier(n_estimators = 100)
+            model.fit(X_train, y_train)
+            pt =model.predict(X_test)
+            predicted.extend(pt)
+            real.extend(y_test)
+
+        print("Y:", real)
+        print("Predicted:", predicted)
+        accuuracy = accuracy_score(real, predicted)
+        print("Accuracy is: ", accuuracy)
