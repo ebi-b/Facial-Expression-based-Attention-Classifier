@@ -28,7 +28,6 @@ def calculate_gaze_angle_parameters(point):
         print(avg_movement_gaze_angle, gaze_angle_avg, gaze_angle_std)
     return avg_movement_gaze_angle, gaze_angle_avg, gaze_angle_std
 
-
 def calculate_action_units_parameters(point, period):
         print("Calculating Metrics in processed_data_points for participant {0} and datapoint {1}...".format(point.participant_number, point.rate.timestamp))
         new_array_c = []
@@ -92,3 +91,49 @@ def calcualate_facial_expression_parameters(point, period):
 
 def calculate_pitch_roll_yaw(point):
     print("Calcualting Pitch, Roll, Yaw.")
+    avg_movement_pitch_roll_yaw, pitch_roll_yaw_avg, pitch_roll_yaw_std = [], [], []
+    if hasattr(point.openface_object, 'pose_R_array'):
+        pose_R_array = point.openface_object.pose_R_array
+        number = 0
+        dst = np.zeros(3)
+        for i in range(1, len(pose_R_array)):
+            if sum(pose_R_array[i]) != 0 and sum(pose_R_array[i - 1]) != 0:
+                dst += np.absolute(np.array(pose_R_array[i]) - np.array(pose_R_array[i - 1]))
+                number += 1
+        avg_movement_pitch_roll_yaw = dst / number
+
+        new_pose_r_array = []
+        for i in range(len(pose_R_array)):
+            if sum(pose_R_array[i]) != 0:
+                new_pose_r_array.append(pose_R_array[i])
+
+        new_pose_r_array = np.array(new_pose_r_array)
+        pitch_roll_yaw_avg = new_pose_r_array.mean(axis=0)
+        pitch_roll_yaw_std = new_pose_r_array.std(axis=0)
+
+    return avg_movement_pitch_roll_yaw, pitch_roll_yaw_avg, pitch_roll_yaw_std
+
+def calculate_head_pose(point):
+    print("Calcualting Head Pose")
+    avg_movement_head_pose, head_pose_avg, head_pose_std = [], [], []
+    if hasattr(point.openface_object, 'pose_T_array'):
+        pose_T_array = point.openface_object.pose_T_array
+        number = 0
+        dst = np.zeros(3)
+        for i in range(1, len(pose_T_array)):
+            if sum(pose_T_array[i]) != 0 and sum(pose_T_array[i - 1]) != 0:
+                dst += np.absolute(np.array(pose_T_array[i]) - np.array(pose_T_array[i - 1]))
+                number += 1
+        avg_movement_head_pose = dst / number
+
+        new_pose_t_array = []
+        for i in range(len(pose_T_array)):
+            if sum(pose_T_array[i]) != 0:
+                new_pose_t_array.append(pose_T_array[i])
+
+        new_pose_t_array = np.array(new_pose_t_array)
+        head_pose_avg = new_pose_t_array.mean(axis=0)
+        head_pose_std = new_pose_t_array.std(axis=0)
+
+
+    return avg_movement_head_pose, head_pose_avg, head_pose_std

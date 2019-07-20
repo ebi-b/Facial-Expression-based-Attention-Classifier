@@ -47,7 +47,8 @@ class FacialExpressionClassifier:
                             tmp = []
                             au_c_avg, au_c_std, au_r_avg, au_r_std = fef.calculate_action_units_parameters(point, 30)
                             gaze_avg_movements, gaze_avg, gaze_std = fef.calculate_gaze_angle_parameters(point)
-                            #
+                            avg_movement_head_pose, head_pose_avg, head_pose_std = fef.calculate_head_pose(point)
+                            avg_movement_pitch_roll_yaw, pitch_roll_yaw_avg, pitch_roll_yaw_std = fef.calculate_pitch_roll_yaw(point)
                             print("toole au_c_avg is: ", len(au_c_avg))
                             if sum(au_c_avg) == 0:
                                 print("SUM++00")
@@ -59,9 +60,21 @@ class FacialExpressionClassifier:
                                 tmp.extend(au_r_std)
                                 tmp.extend(au_c_avg)
                                 tmp.extend(au_c_std)
+
                                 tmp.extend(gaze_avg_movements)
                                 tmp.extend(gaze_avg)
                                 tmp.extend(gaze_std)
+
+                                tmp.extend(avg_movement_head_pose)
+                                tmp.extend(head_pose_avg)
+                                tmp.extend(head_pose_std)
+
+                                tmp.extend(avg_movement_pitch_roll_yaw)
+                                print("avg: {0}".format(pitch_roll_yaw_avg))
+                                tmp.extend(pitch_roll_yaw_avg)
+                                print("std: {0}".format(pitch_roll_yaw_std))
+                                tmp.extend(pitch_roll_yaw_std)
+
                                 au_cr.append(tmp)
                         except(TypeError):
                             print("Error in participant {0} and timestamp {1}.".format(point.participant_number, point.rate.timestamp))
