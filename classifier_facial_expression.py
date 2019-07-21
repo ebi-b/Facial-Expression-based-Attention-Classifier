@@ -21,6 +21,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+from sklearn.linear_model import LogisticRegressionCV
 
 class FacialExpressionClassifier:
 
@@ -72,9 +73,9 @@ class FacialExpressionClassifier:
                                 tmp.extend(head_pose_std)
 
                                 tmp.extend(avg_movement_pitch_roll_yaw)
-                                print("avg: {0}".format(pitch_roll_yaw_avg))
+                                #print("avg: {0}".format(pitch_roll_yaw_avg))
                                 tmp.extend(pitch_roll_yaw_avg)
-                                print("std: {0}".format(pitch_roll_yaw_std))
+                                #print("std: {0}".format(pitch_roll_yaw_std))
                                 tmp.extend(pitch_roll_yaw_std)
 
                                 au_cr.append(tmp)
@@ -133,7 +134,7 @@ class FacialExpressionClassifier:
                 chal_y_test.append(chal_labels[k])
 
             X_train,X_test = self.pca_transformation(X_train, X_test)
-            SVM_quadrant = svm.LinearSVC(class_weight='balanced', max_iter=5000)
+            SVM_quadrant = svm.LinearSVC(class_weight='balanced', max_iter=1000000)
             SVM_quadrant.fit(X_train, quadrant_y_train)
             pt = SVM_quadrant.predict(X_test)
             predicted_quadran.extend(pt)
@@ -165,67 +166,7 @@ class FacialExpressionClassifier:
         self.kernel_classifier(au_cr, quadrant_labels)
         self.xgboost_classifier(au_cr, quadrant_labels)
         self.random_forest(au_cr, quadrant_labels)
-
-    def calculate_labels(self, datapoint):
-        #print("In set labels...")
-
-        #           |
-        #           |
-        #    Ro=1   |   Fo=2
-        # ----------|----------
-        #           |
-        #      Bo=3 |   Fr=4
-        #           |
-
-
-        if datapoint.rate.challenge> 50+self.margin_for_challenge:
-            challenge_label = 1
-            if datapoint.rate.engagement > 50+self.margin_for_engagement:
-                quadrant_label = 2
-                engagement_label = 1
-            elif datapoint.rate.engagement < 50-self.margin_for_engagement:
-                quadrant_label = 4
-                engagement_label = 0
-            else:
-                quadrant_label = "mr"
-                engagement_label = 'mr'
-
-        elif datapoint.rate.challenge < 50-self.margin_for_challenge:
-            challenge_label = 0
-            if datapoint.rate.engagement > 50+self.margin_for_engagement:
-                quadrant_label = 1
-                engagement_label = 1
-            elif datapoint.rate.engagement < 50-self.margin_for_engagement:
-                quadrant_label = 3
-                engagement_label = 0
-            else:
-                quadrant_label = "mr"
-                engagement_label = 'mr'
-        else:
-            quadrant_label = "mr"
-            challenge_label = 'mr'
-            if datapoint.rate.engagement > 50+self.margin_for_engagement:
-                engagement_label = 1
-            elif datapoint.rate.engagement < 50-self.margin_for_engagement:
-                engagement_label = 0
-            else:
-                quadrant_label = "mr"
-                engagement_label = 'mr'
-
-        return quadrant_label, engagement_label, challenge_label
-        #print("quad label is: ", self.quadrant_label)
-
-    @staticmethod
-    def load_participants(path):
-        participants = []
-        for filename in os.listdir(path):
-            file_pi2 = open(str(path) + "\\" + str(filename), 'rb')
-            participant = pickle.load(file_pi2)
-            print("Participant {0} is Loaded.".format(filename))
-            participants.append(participant)
-        #filehandler = open("participants.obj", 'wb')
-        #pickle.dump(participants, filehandler)
-        return participants
+        self.logistic_regression_classifier(au_cr, quadrant_labels)
 
     def kernel_classifier(self, au_cr, quadrant_labels):
         print("Kernel Classifier")
@@ -255,7 +196,7 @@ class FacialExpressionClassifier:
                 y_test.append(quadrant_labels[k])
 
             X_train, X_test = self.pca_transformation(X_train, X_test)
-            SVM = svm.SVC(kernel= 'poly', degree=2, gamma='scale', max_iter=3000)
+            SVM = svm.SVC(kernel= 'poly', degree=2, gamma='scale', max_iter=3000, class_weight='balanced')
             SVM.fit(X_train, y_train)
             pt = SVM.predict(X_test)
             predicted.extend(pt)
@@ -312,17 +253,6 @@ class FacialExpressionClassifier:
         accuuracy = accuracy_score(real, predicted)
         print("Accuracy is: ", accuuracy)
 
-    def test_parameters(self):
-        data_points = []
-        for participant in self.participants:
-            data_points.append(participant.data_points)
-        for i in range(len(data_points)):
-            for point in data_points[i]:
-                        try:
-                            fef.calcualate_facial_expression_parameters(point, 195)
-                        except(TypeError):
-                            print("Error in participant {0} and timestamp {1}.".format(point.participant_number, point.rate.timestamp))
-
     def random_forest(self,au_cr, quadrant_labels):
         print("random forest")
         # Leave One Out
@@ -367,8 +297,119 @@ class FacialExpressionClassifier:
         X_train = sc.fit_transform(X_train)
         X_test = sc.transform(X_test)
 
-        pca = PCA(n_components=18)
+        pca = PCA(n_components=10)
         X_train = pca.fit_transform(X_train)
         X_test = pca.transform(X_test)
 
         return X_train, X_test
+
+    @staticmethod
+    def load_participants(path):
+        participants = []
+        for filename in os.listdir(path):
+            file_pi2 = open(str(path) + "\\" + str(filename), 'rb')
+            participant = pickle.load(file_pi2)
+            print("Participant {0} is Loaded.".format(filename))
+            participants.append(participant)
+        # filehandler = open("participants.obj", 'wb')
+        # pickle.dump(participants, filehandler)
+        return participants
+
+    def calculate_labels(self, datapoint):
+        #print("In set labels...")
+
+        #           |
+        #           |
+        #    Ro=1   |   Fo=2
+        # ----------|----------
+        #           |
+        #      Bo=3 |   Fr=4
+        #           |
+
+
+        if datapoint.rate.challenge> 50+self.margin_for_challenge:
+            challenge_label = 1
+            if datapoint.rate.engagement > 50+self.margin_for_engagement:
+                quadrant_label = 2
+                engagement_label = 1
+            elif datapoint.rate.engagement < 50-self.margin_for_engagement:
+                quadrant_label = 4
+                engagement_label = 0
+            else:
+                quadrant_label = "mr"
+                engagement_label = 'mr'
+
+        elif datapoint.rate.challenge < 50-self.margin_for_challenge:
+            challenge_label = 0
+            if datapoint.rate.engagement > 50+self.margin_for_engagement:
+                quadrant_label = 1
+                engagement_label = 1
+            elif datapoint.rate.engagement < 50-self.margin_for_engagement:
+                quadrant_label = 3
+                engagement_label = 0
+            else:
+                quadrant_label = "mr"
+                engagement_label = 'mr'
+        else:
+            quadrant_label = "mr"
+            challenge_label = 'mr'
+            if datapoint.rate.engagement > 50+self.margin_for_engagement:
+                engagement_label = 1
+            elif datapoint.rate.engagement < 50-self.margin_for_engagement:
+                engagement_label = 0
+            else:
+                quadrant_label = "mr"
+                engagement_label = 'mr'
+
+        return quadrant_label, engagement_label, challenge_label
+        #print("quad label is: ", self.quadrant_label)
+
+    def test_parameters(self):
+        data_points = []
+        for participant in self.participants:
+            data_points.append(participant.data_points)
+        for i in range(len(data_points)):
+            for point in data_points[i]:
+                        try:
+                            fef.calcualate_facial_expression_parameters(point, 195)
+                        except(TypeError):
+                            print("Error in participant {0} and timestamp {1}.".format(point.participant_number, point.rate.timestamp))
+
+    def logistic_regression_classifier(self, au_cr, quadrant_labels):
+        print("Kernel Classifier")
+        # Leave One Out
+        loo = LeaveOneOut()
+        loo.get_n_splits(au_cr)
+        # print(loo)
+
+        # k-fold
+        kf = KFold(n_splits = 10)
+        kf.get_n_splits(au_cr)
+
+        predicted = []
+        real = []
+        #for train_index, test_index in loo.split(au_cr):
+        for train_index, test_index in loo.split(au_cr):
+            # print("TRAIN:", train_index, "TEST:", test_index)
+            X_test = []
+            X_train = []
+            y_test = []
+            y_train = []
+            for j in train_index:
+                X_train.append(au_cr[j])
+                y_train.append(quadrant_labels[j])
+            for k in test_index:
+                X_test.append(au_cr[k])
+                y_test.append(quadrant_labels[k])
+
+            X_train, X_test = self.pca_transformation(X_train, X_test)
+            model = LogisticRegressionCV(class_weight='balanced', multi_class='ovr')
+            model.fit(X_train, y_train)
+            pt = model.predict(X_test)
+            predicted.extend(pt)
+            real.extend(y_test)
+        print("Logistic Regression is : ")
+        print("Y:", real)
+        print("Predicted:", predicted)
+        accuuracy = accuracy_score(real, predicted)
+        print("Accuracy is: ", accuuracy)

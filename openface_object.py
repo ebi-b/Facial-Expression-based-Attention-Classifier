@@ -9,7 +9,7 @@ from termcolor import colored
 
 class Openface:
 
-    def __init__(self, rate, path_of_frames, participant_number):
+    def __init__(self, rate, path_of_frames, participant_number, to_mini_points=False):
         print("openface object is created...")
         self.participant_number = participant_number
         self.path_of_frames = path_of_frames
@@ -36,12 +36,13 @@ class Openface:
         self.set_frame_name_and_timestamp()
         self.dst_dir = "Y:\\Openface_Processed_Frames\\Folder_of_CSVs"+"\\"+str(participant_number)
         self.csv_path = ""
-        self.extract_csv()
-        if self.csv_path == "":
-            tmpstr = "Folder {0} for Participant {1} is Empty Check it...".format(rate.timestamp,participant_number)
-            print(colored(tmpstr, 'red'))
-        else:
-            self.openface_csv_read()
+        if not to_mini_points:
+            self.extract_csv()
+            if self.csv_path == "":
+                tmpstr = "Folder {0} for Participant {1} is Empty Check it...".format(rate.timestamp,participant_number)
+                print(colored(tmpstr, 'red'))
+            else:
+                self.openface_csv_read()
 
 
     def extract_csv(self):

@@ -283,3 +283,14 @@ class Participant:
                 data_points_with_openface.append(datapoint)
 
             self.data_points = data_points_with_openface
+
+    def split_to_mini_datapoints(self,lenght):
+        mini_data_points = []
+        for datapoint in self.data_points:
+            mini_data_points.append(datapoint.to_mini_data_points(lenght))
+        new_mini_data_points = []
+        for i in range(len(mini_data_points)):
+            for j in range(len(mini_data_points[i])):
+                new_mini_data_points.append(mini_data_points[i][j])
+        return new_mini_data_points
+
