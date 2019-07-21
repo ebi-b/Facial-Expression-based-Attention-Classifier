@@ -25,7 +25,7 @@ def read_omron_file(number, path_of_log):
             timestamp_array = []
 
             for sample in file_array_string:
-                print(sample)
+                #print(sample)
                 expression = ""
                 neutral_score = 0
                 anger_score = 0
@@ -92,7 +92,7 @@ def read_omron_file(number, path_of_log):
                         anger_score_array.append(anger_score)
                         sadness_score_array.append(sadness_score)
                         timestamp_array.append(time_stamp)
-                        print(time_stamp)
+                        #print(time_stamp)
                     except:
                         # print(sample)
                         print("")

@@ -6,14 +6,9 @@
     <bookmark url="file://$PROJECT_DIR$/fanctions_for_splitting_datapoints.py" line="2" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee7cd93b-089b-436e-8a77-3f8eae2e9c1c" name="Default Changelist" comment="splitting to mini data points added">
-      <change afterPath="$PROJECT_DIR$/omron_object.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/omron_processing_functions.py" afterDir="false" />
+    <list default="true" id="ee7cd93b-089b-436e-8a77-3f8eae2e9c1c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classification_script.py" beforeDir="false" afterPath="$PROJECT_DIR$/classification_script.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_point.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_point.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fanctions_for_splitting_datapoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/fanctions_for_splitting_datapoints.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/participant.py" beforeDir="false" afterPath="$PROJECT_DIR$/participant.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/omron_processing_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/omron_processing_functions.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,7 +18,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/classification_script.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
@@ -58,11 +53,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/omron_processing_functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="241">
-              <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
+            <state relative-caret-position="1598">
+              <caret line="94" column="25" selection-start-line="94" selection-start-column="25" selection-end-line="94" selection-end-column="25" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -206,10 +201,10 @@
         <option value="$USER_HOME$/Desktop/PreProcessing/OmronObject.py" />
         <option value="$PROJECT_DIR$/omron_processing.py" />
         <option value="$PROJECT_DIR$/participant.py" />
-        <option value="$PROJECT_DIR$/classification_script.py" />
-        <option value="$PROJECT_DIR$/omron_processing_functions.py" />
         <option value="$PROJECT_DIR$/omron_object.py" />
         <option value="$PROJECT_DIR$/data_point.py" />
+        <option value="$PROJECT_DIR$/classification_script.py" />
+        <option value="$PROJECT_DIR$/omron_processing_functions.py" />
       </list>
     </option>
   </component>
@@ -637,7 +632,14 @@
       <option name="project" value="LOCAL" />
       <updated>1563686560783</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Omron Objects Added">
+      <created>1563702158808</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1563702158808</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TodoView">
@@ -651,14 +653,15 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20040214" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.7044236" weight="0.29278642" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.39886847" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.7044236" visible="true" weight="0.29278642" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39886847" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3281471" />
@@ -692,18 +695,8 @@
     <MESSAGE value="head pose and radiance calculated" />
     <MESSAGE value="pca added" />
     <MESSAGE value="splitting to mini data points added" />
-    <option name="LAST_COMMIT_MESSAGE" value="splitting to mini data points added" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/classification_script.py</url>
-          <line>9</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Omron Objects Added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Omron Objects Added" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/openface_script.py" />
@@ -918,16 +911,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/omron_processing_functions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/omron_object.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -955,6 +938,16 @@
           <caret line="9" selection-start-line="9" selection-end-line="9" />
           <folding>
             <element signature="e#0#67#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/omron_processing_functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1598">
+          <caret line="94" column="25" selection-start-line="94" selection-start-column="25" selection-end-line="94" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
