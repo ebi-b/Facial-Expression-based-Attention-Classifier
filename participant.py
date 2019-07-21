@@ -9,6 +9,7 @@ from rates import Rate
 from interruption import Interruptions
 from data_point import DataPoint
 import rarfile
+import omron_processing_functions as opf
 
 class Participant:
 
@@ -285,6 +286,7 @@ class Participant:
             self.data_points = data_points_with_openface
 
     def split_to_mini_datapoints(self,lenght):
+        lenght = lenght - 0.1
         mini_data_points = []
         for datapoint in self.data_points:
             mini_data_points.append(datapoint.to_mini_data_points(lenght))
@@ -294,3 +296,7 @@ class Participant:
                 new_mini_data_points.append(mini_data_points[i][j])
         return new_mini_data_points
 
+    def set_omron_objects(self, path):
+        self.participant_omron_object = opf.read_omron_file(self.number, path)
+        for datapoint in self.data_points:
+            datapoint.set_omron_object(total_omron_object=self.participant_omron_object, period= 195, margin= 15)

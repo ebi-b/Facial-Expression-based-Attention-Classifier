@@ -6,13 +6,13 @@
     <bookmark url="file://$PROJECT_DIR$/fanctions_for_splitting_datapoints.py" line="2" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee7cd93b-089b-436e-8a77-3f8eae2e9c1c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/fanctions_for_splitting_datapoints.py" afterDir="false" />
+    <list default="true" id="ee7cd93b-089b-436e-8a77-3f8eae2e9c1c" name="Default Changelist" comment="splitting to mini data points added">
+      <change afterPath="$PROJECT_DIR$/omron_object.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/omron_processing_functions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classification_script.py" beforeDir="false" afterPath="$PROJECT_DIR$/classification_script.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classifier_facial_expression.py" beforeDir="false" afterPath="$PROJECT_DIR$/classifier_facial_expression.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_point.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_point.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openface_object.py" beforeDir="false" afterPath="$PROJECT_DIR$/openface_object.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fanctions_for_splitting_datapoints.py" beforeDir="false" afterPath="$PROJECT_DIR$/fanctions_for_splitting_datapoints.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/participant.py" beforeDir="false" afterPath="$PROJECT_DIR$/participant.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,11 +23,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/classification_script.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="46" lean-forward="true" selection-start-line="6" selection-start-column="46" selection-end-line="6" selection-end-column="46" />
+            <state relative-caret-position="153">
+              <caret line="9" selection-start-line="9" selection-end-line="9" />
               <folding>
                 <element signature="e#0#67#0" expanded="true" />
               </folding>
@@ -38,8 +38,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/participant.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="281">
-              <caret line="286" column="32" selection-start-line="286" selection-start-column="8" selection-end-line="286" selection-end-column="32" />
+            <state relative-caret-position="315">
+              <caret line="299" selection-start-line="299" selection-end-line="299" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
                 <element signature="e#811#865#0" />
@@ -52,6 +52,49 @@
                 <element signature="e#6892#6992#0" />
                 <element signature="e#7268#10039#0" />
                 <element signature="e#10171#13202#0" />
+                <element signature="e#13268#13646#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/omron_processing_functions.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="241">
+              <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
+              <folding>
+                <element signature="e#0#29#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/codecs.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="133">
+              <caret line="267" selection-start-line="267" selection-end-line="267" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/_bootlocale.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="13" selection-start-line="13" selection-end-line="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/omron_object.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="11" column="39" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
+              <folding>
+                <element signature="e#0#29#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -61,7 +104,7 @@
         <entry file="file://$PROJECT_DIR$/classifier_facial_expression.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="79">
-              <caret line="306" column="8" lean-forward="true" selection-start-line="306" selection-start-column="8" selection-end-line="306" selection-end-column="25" />
+              <caret line="306" column="8" selection-start-line="306" selection-start-column="8" selection-end-line="306" selection-end-column="25" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
                 <element signature="e#12033#13746#0" />
@@ -72,11 +115,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fanctions_for_splitting_datapoints.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="17" column="62" lean-forward="true" selection-start-line="17" selection-start-column="62" selection-end-line="17" selection-end-column="62" />
+            <state relative-caret-position="170">
+              <caret line="10" column="53" selection-start-line="10" selection-start-column="53" selection-end-line="10" selection-end-column="53" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -87,8 +130,12 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data_point.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="19" selection-start-line="15" selection-start-column="16" selection-end-line="19" />
+            <state relative-caret-position="261">
+              <caret line="42" column="88" selection-start-line="42" selection-start-column="88" selection-end-line="42" selection-end-column="88" />
+              <folding>
+                <element signature="e#0#48#0" expanded="true" />
+                <element signature="e#323#770#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -96,10 +143,9 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/openface_object.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="44" column="16" selection-start-line="44" selection-start-column="16" selection-end-line="44" selection-end-column="16" />
+            <state relative-caret-position="-255">
+              <caret line="3" column="1" selection-start-line="3" selection-start-column="1" selection-end-line="3" selection-end-column="1" />
               <folding>
-                <element signature="e#0#17#0" expanded="true" />
                 <element signature="e#1593#2544#0" />
               </folding>
             </state>
@@ -154,11 +200,16 @@
         <option value="$PROJECT_DIR$/facial_expression_functions.py" />
         <option value="$PROJECT_DIR$/classifier_facial_expression.py" />
         <option value="$PROJECT_DIR$/mini_participant.py" />
-        <option value="$PROJECT_DIR$/participant.py" />
-        <option value="$PROJECT_DIR$/classification_script.py" />
-        <option value="$PROJECT_DIR$/data_point.py" />
         <option value="$PROJECT_DIR$/openface_object.py" />
         <option value="$PROJECT_DIR$/fanctions_for_splitting_datapoints.py" />
+        <option value="$USER_HOME$/Desktop/PreProcessing/OMRON-Processing.py" />
+        <option value="$USER_HOME$/Desktop/PreProcessing/OmronObject.py" />
+        <option value="$PROJECT_DIR$/omron_processing.py" />
+        <option value="$PROJECT_DIR$/participant.py" />
+        <option value="$PROJECT_DIR$/classification_script.py" />
+        <option value="$PROJECT_DIR$/omron_processing_functions.py" />
+        <option value="$PROJECT_DIR$/omron_object.py" />
+        <option value="$PROJECT_DIR$/data_point.py" />
       </list>
     </option>
   </component>
@@ -180,6 +231,17 @@
             <path>
               <item name="Analysis_on_Dataset" type="b2602c69:ProjectViewProjectNode" />
               <item name="Analysis_on_Dataset" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Analysis_on_Dataset" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Analysis_on_Dataset" type="462c0819:PsiDirectoryNode" />
+              <item name="omron object" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Analysis_on_Dataset" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Analysis_on_Dataset" type="462c0819:PsiDirectoryNode" />
+              <item name="omron object" type="462c0819:PsiDirectoryNode" />
+              <item name="5" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -568,7 +630,14 @@
       <option name="project" value="LOCAL" />
       <updated>1563615207474</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="splitting to mini data points added">
+      <created>1563686560783</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1563686560783</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TodoView">
@@ -582,15 +651,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20040214" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.7044236" visible="true" weight="0.29420084" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.7044236" weight="0.29278642" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.39886847" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3281471" />
@@ -623,7 +691,19 @@
     <MESSAGE value="Gaze angles calculated" />
     <MESSAGE value="head pose and radiance calculated" />
     <MESSAGE value="pca added" />
-    <option name="LAST_COMMIT_MESSAGE" value="pca added" />
+    <MESSAGE value="splitting to mini data points added" />
+    <option name="LAST_COMMIT_MESSAGE" value="splitting to mini data points added" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/classification_script.py</url>
+          <line>9</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/openface_script.py" />
@@ -696,23 +776,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="97" column="49" selection-start-line="96" selection-start-column="12" selection-end-line="97" selection-end-column="49" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/codecs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="321" selection-start-line="321" selection-end-line="321" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/site-packages/sklearn/model_selection/_split.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="890">
@@ -762,10 +825,35 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/openface_object.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-255">
+          <caret line="3" column="1" selection-start-line="3" selection-start-column="1" selection-end-line="3" selection-end-column="1" />
+          <folding>
+            <element signature="e#1593#2544#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/PreProcessing/OmronObject.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/PreProcessing/OMRON-Processing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1360">
+          <caret line="87" column="25" lean-forward="true" selection-start-line="10" selection-end-line="87" selection-end-column="25" />
+          <folding>
+            <element signature="e#4004#4014#0" />
+            <element signature="e#4072#13909#0" />
+            <element signature="e#13962#23719#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/classifier_facial_expression.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="79">
-          <caret line="306" column="8" lean-forward="true" selection-start-line="306" selection-start-column="8" selection-end-line="306" selection-end-column="25" />
+          <caret line="306" column="8" selection-start-line="306" selection-start-column="8" selection-end-line="306" selection-end-column="25" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
             <element signature="e#12033#13746#0" />
@@ -775,10 +863,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/fanctions_for_splitting_datapoints.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="53" selection-start-line="10" selection-start-column="53" selection-end-line="10" selection-end-column="53" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="97" column="49" selection-start-line="96" selection-start-column="12" selection-end-line="97" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/participant.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="286" column="32" selection-start-line="286" selection-start-column="8" selection-end-line="286" selection-end-column="32" />
+        <state relative-caret-position="315">
+          <caret line="299" selection-start-line="299" selection-end-line="299" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
             <element signature="e#811#865#0" />
@@ -791,44 +899,62 @@
             <element signature="e#6892#6992#0" />
             <element signature="e#7268#10039#0" />
             <element signature="e#10171#13202#0" />
+            <element signature="e#13268#13646#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/classification_script.py">
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/_bootlocale.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="46" lean-forward="true" selection-start-line="6" selection-start-column="46" selection-end-line="6" selection-end-column="46" />
+        <state relative-caret-position="204">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="267" selection-start-line="267" selection-end-line="267" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/omron_processing_functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="241">
+          <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
           <folding>
-            <element signature="e#0#67#0" expanded="true" />
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/omron_object.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="39" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data_point.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" selection-start-line="15" selection-start-column="16" selection-end-line="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/openface_object.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="44" column="16" selection-start-line="44" selection-start-column="16" selection-end-line="44" selection-end-column="16" />
+        <state relative-caret-position="261">
+          <caret line="42" column="88" selection-start-line="42" selection-start-column="88" selection-end-line="42" selection-end-column="88" />
           <folding>
-            <element signature="e#0#17#0" expanded="true" />
-            <element signature="e#1593#2544#0" />
+            <element signature="e#0#48#0" expanded="true" />
+            <element signature="e#323#770#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fanctions_for_splitting_datapoints.py">
+    <entry file="file://$PROJECT_DIR$/classification_script.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="17" column="62" lean-forward="true" selection-start-line="17" selection-start-column="62" selection-end-line="17" selection-end-column="62" />
+        <state relative-caret-position="153">
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
           <folding>
-            <element signature="e#0#36#0" expanded="true" />
+            <element signature="e#0#67#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -1,7 +1,7 @@
 from openface_object import Openface
 import numpy as np
 def split_openface_object(openface_object, lenght):
-    print("in split_openfacec_object.")
+    print("in split_openfacec_object for participant {0} and timestamp {1}".format(openface_object.participant_number ,openface_object.rate.timestamp))
     #openface_object =(Openface) (openface_object)
     if hasattr(openface_object,'snapshot_files_timestamp'):
         if openface_object.snapshot_files_timestamp != []:
@@ -10,7 +10,8 @@ def split_openface_object(openface_object, lenght):
             min =snapshot_files_timestamp.min()
             number_of_objects = int((max-min)/lenght)
             mini_openface_objects = []
-
+            print("Len snapshot File Timestamp: ", len(snapshot_files_timestamp))
+            print("Len           au_c Array   : ", len(openface_object.au_c_array))
             for j in range(number_of_objects):
                 new_mini_openface_object = Openface(openface_object.rate, openface_object.path_of_frames, openface_object.participant_number, to_mini_points = True)
                 min_timestamp = max - ((j+1) * lenght)
