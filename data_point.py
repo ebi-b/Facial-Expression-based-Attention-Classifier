@@ -1,4 +1,4 @@
-import fanctions_for_splitting_datapoints as fsd
+import functions_for_splitting_datapoints as fsd
 from omron_object import OmronObject
 
 

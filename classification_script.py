@@ -1,6 +1,8 @@
 from classifier_facial_expression import FacialExpressionClassifier
 import pickle
 from classifier_facial_expression import FacialExpressionClassifier as fec
+from termcolor import colored
+
 #classifier = FacialExpressionClassifier("Y:\\Openface_Processed_Frames\\Participant_objects", 5, 5)
 
 participants = fec.load_participants("Y:\\Openface_Processed_Frames\\sample")
@@ -15,6 +17,7 @@ for participant in participants:
             pickle.dump(participant, filehandler)
 
         except:
-            print("Error in participant {0} and lenght {1}".format(participant.number, lenght))
+            str="Error in participant {0} and lenght {1}".format(participant.number, lenght)
+            print(colored(str , 'red'))
 
 

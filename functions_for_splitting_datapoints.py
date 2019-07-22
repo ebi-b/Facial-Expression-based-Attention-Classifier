@@ -128,7 +128,7 @@ def synch_mini_objects(mini_openface_object_array, mini_omron_object_array):
 
     for i in range(len(mini_omron_object_array)):
         for j in range(len(mini_openface_object_array)):
-            omron_obj = mini_openface_object_array[i]
+            omron_obj = mini_omron_object_array[i]
             openface_obj = mini_openface_object_array[j]
             if is_the_same_time_window(omron_obj.rate, openface_obj.rate):
                 new_mini_data_point = dp.DataPoint(openface_obj.participant_number, openface_obj.rate)
