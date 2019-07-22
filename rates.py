@@ -13,3 +13,5 @@ class Rate:
     def print_rate(self):
         print("Timestamp:{0}, Eng: {1}, Chal: {2}".format(self.timestamp,self.engagement,self.challenge))
 
+    def set_mini_timestamp(self, timestamp):
+        self.mini_timestamp = timestamp

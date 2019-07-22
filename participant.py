@@ -289,14 +289,14 @@ class Participant:
         lenght = lenght - 0.1
         mini_data_points = []
         for datapoint in self.data_points:
-            mini_data_points.append(datapoint.to_mini_data_points(lenght))
+            mini_data_points.append(datapoint.to_mini_data_points(lenght, margin=15))
         new_mini_data_points = []
         for i in range(len(mini_data_points)):
             for j in range(len(mini_data_points[i])):
                 new_mini_data_points.append(mini_data_points[i][j])
-        return new_mini_data_points
+        self.mini_data_points = new_mini_data_points
 
     def set_omron_objects(self, path):
         self.participant_omron_object = opf.read_omron_file(self.number, path)
         for datapoint in self.data_points:
-            datapoint.set_omron_object(total_omron_object=self.participant_omron_object, period= 195, margin= 15)
+            datapoint.generate_omron_objects(total_omron_object=self.participant_omron_object, period= 195, margin= 15)

@@ -97,7 +97,7 @@ def read_omron_file(number, path_of_log):
                         # print(sample)
                         print("")
             omron_total_object = OmronObject(participant_number=number, timestamp_array=timestamp_array, expression_array=expression_array, anger_rate_array=anger_score_array,
-                                             sadness_rate_array=sadness_score_array, happiness_rate_array=happiness_score_array, surprise_rate_array=surprise_score_array, neutral_rate_array=neutral_score_array
+                                             sadness_rate_array=sadness_score_array, happiness_rate_array=happiness_score_array, surprise_rate_array=surprise_score_array, neutral_rate_array=neutral_score_array, rate=None
                                              )
 
             return omron_total_object
