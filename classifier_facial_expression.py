@@ -12,28 +12,62 @@ from participant import Participant
 import matplotlib.cm as cm
 from sklearn.model_selection import LeaveOneOut
 from sklearn.metrics import average_precision_score
-from sklearn.metrics import  accuracy_score
+from sklearn.metrics import  accuracy_score, roc_auc_score
 import numpy as np
 from sklearn.metrics import precision_recall_fscore_support
 import xgboost as xgb
 import facial_expression_functions as fef
+import omron_expressions_functions as oef
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.linear_model import LogisticRegressionCV
+from imblearn.over_sampling import SMOTE
+from imblearn.over_sampling import ADASYN
+from imblearn.over_sampling import RandomOverSampler
+from sklearn.metrics import classification_report, confusion_matrix, auc
+from sklearn.neighbors import KNeighborsClassifier
+import sys
+from sklearn.preprocessing import normalize
+from sklearn.preprocessing import StandardScaler
+from sklearn.naive_bayes import GaussianNB
+from sklearn.feature_selection import RFE
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2
+from sklearn.feature_selection import f_classif
+from sklearn.feature_selection import f_regression
+from sklearn.feature_selection import f_oneway
+
+
+
+
 
 class FacialExpressionClassifier:
 
-    def __init__(self, path_of_participant_objects, margin_for_eng, margin_for_challenge):
-        self.participants = self.load_participants(path_of_participant_objects)
+    def __init__(self, participants, margin_for_eng, margin_for_challenge):
+        #args = sys.argv[1]
+        #self.participants = self.load_participants(path_of_participant_objects)
+        self.participants = participants
         self.margin_for_engagement = margin_for_eng
         self.margin_for_challenge = margin_for_challenge
-        self.classification_datapoint_based()
+
+        #p_au_cr, p_quadrant_labels, p_eng_labels, p_chal_labels, p_p_numbers = self.sliding_windows_preparing_features()
+        #print(np.shape(p_au_cr))
+        #self.classification_datapoint_based()
         #self.test_parameters()
+        self.classification_participant_based()
+
+    def classification_participant_based(self):
+        print("in participant based classifier...")
+        self.xgboost_classifier_participant_based()
+        #self.knn_classifier_participant_based()
 
     def classification_datapoint_based(self):
-        print("In classification Processing...")
+        #print("In classification Processing...")
+        raw_q_labels = []
+        raw_e_labels = []
+        raw_c_labels = []
         eng_labels = []
         chal_labels = []
         quadrant_labels = []
@@ -44,6 +78,9 @@ class FacialExpressionClassifier:
         for i in range(len(data_points)):
             for point in data_points[i]:
                 quadrant_label, eng_label, chal_label = self.calculate_labels(point)
+                raw_q_labels.append(quadrant_label)
+                raw_e_labels.append(eng_label)
+                raw_c_labels.append(chal_label)
                 if eng_label != "mr":
                     if chal_label !="mr":
                         try:
@@ -52,9 +89,10 @@ class FacialExpressionClassifier:
                             gaze_avg_movements, gaze_avg, gaze_std = fef.calculate_gaze_angle_parameters(point)
                             avg_movement_head_pose, head_pose_avg, head_pose_std = fef.calculate_head_pose(point)
                             avg_movement_pitch_roll_yaw, pitch_roll_yaw_avg, pitch_roll_yaw_std = fef.calculate_pitch_roll_yaw(point)
-                            print("toole au_c_avg is: ", len(au_c_avg))
+                            #rint("toole au_c_avg is: ", len(au_c_avg))
                             if sum(au_c_avg) == 0:
-                                print("SUM++00")
+                                #print("SUM++00")
+                                abas=1
                             if len(au_c_avg) != 0 and sum(au_c_avg) != 0:
                                 eng_labels.append(eng_label)
                                 chal_labels.append(chal_label)
@@ -81,14 +119,51 @@ class FacialExpressionClassifier:
                                 au_cr.append(tmp)
                         except(TypeError):
                             print("Error in participant {0} and timestamp {1}.".format(point.participant_number, point.rate.timestamp))
-        for i in range(len(au_cr)):
-            print("Len row ", i," is: ",len(au_cr[i]))
+        #for i in range(len(au_cr)):
+            #print("Len row ", i," is: ",len(au_cr[i]))
         #np_au_cr = numpy.array(au_cr)
         #np_au_cr.reshape((118,70))
         #print(np_au_cr.shape)
         #print(numpy.shape(au_cr))
         #print(numpy.shape(quadrant_labels))
         #print(quadrant_labels)
+        numbers_q = np.zeros(5)
+        numbers_e = np.zeros(3)
+        numbers_c = np.zeros(3)
+        for index in raw_q_labels:
+            if index == 1:
+                numbers_q[0] += 1
+            if index == 2:
+                numbers_q[1] += 1
+            if index == 3:
+                numbers_q[2] += 1
+            if index == 4:
+                numbers_q[3] += 1
+            if index == 'mr':
+                numbers_q[4] += 1
+        avg_q = numbers_q/sum(numbers_q)
+        print("avg_q : {0} ".format(avg_q))
+        print("labels_q : {0} ".format(numbers_q))
+
+        for i in range(len(raw_e_labels)):
+            if raw_e_labels[i] == 0:
+                numbers_e[0] += 1
+            if raw_e_labels[i] == 1:
+                numbers_e[1] += 1
+            if raw_e_labels[i] == 'mr':
+                numbers_e[2] += 1
+            if raw_c_labels[i] == 0:
+                numbers_c[0] += 1
+            if raw_c_labels[i] == 1:
+                numbers_c[1] += 1
+            if raw_c_labels[i] == 'mr':
+                numbers_c[2] += 1
+        #avg_e = numbers_e/sum(numbers_e)
+        #print("avg_e : {0} ".format(avg_e))
+        #print("labels_e : {0} ".format(numbers_e))
+        #avg_c = numbers_c / sum(numbers_c)
+        #print("avg_c : {0} ".format(avg_c))
+        #print("labels_c : {0} ".format(numbers_c))
 
 
         #Leave One Out
@@ -208,7 +283,7 @@ class FacialExpressionClassifier:
         print("Accuracy is: ", accuuracy)
 
     def xgboost_classifier(self,au_cr, quadrant_labels):
-
+        print("XGBOOST")
         data_dmatrix = xgb.DMatrix(data=au_cr, label=quadrant_labels)
         loo = LeaveOneOut()
         loo.get_n_splits(au_cr)
@@ -221,7 +296,7 @@ class FacialExpressionClassifier:
         predicted = []
         real = []
         # for train_index, test_index in loo.split(au_cr):
-        for train_index, test_index in kf.split(au_cr):
+        for train_index, test_index in loo.split(au_cr):
             # print("TRAIN:", train_index, "TEST:", test_index)
             X_test = []
             X_train = []
@@ -238,13 +313,15 @@ class FacialExpressionClassifier:
             X_test = np.array(X_test)
             y_train = np.array(y_train)
             y_test = np.array(y_test)
+            smt = SMOTE()
+            X_train, y_train = smt.fit_sample(X_train, y_train)
             #SVM = svm.SVC(gamma='scale', class_weight='balanced')
             #SVM.fit(X_train, y_train)
             #pt = SVM.predict(X_test)
-            X_train, X_test = self.pca_transformation(X_train, X_test)
-            model = xgb.XGBClassifier(objective='multi:softmax', max_iter=3000).fit(X_train , y_train)
+            #X_train, X_test = self.pca_transformation(X_train, X_test)
+            model= RandomForestClassifier(n_estimators= 500)
+            #model = xgb.XGBClassifier(objective='multi:softmax', max_iter=3000).fit(X_train , y_train)
             pt = model.predict(X_test)
-
             predicted.extend(pt)
             real.extend(y_test)
 
@@ -267,7 +344,7 @@ class FacialExpressionClassifier:
         predicted = []
         real = []
         # for train_index, test_index in loo.split(au_cr):
-        for train_index, test_index in loo.split(au_cr):
+        for train_index, test_index in kf.split(au_cr):
             # print("TRAIN:", train_index, "TEST:", test_index)
             X_test = []
             X_train = []
@@ -310,7 +387,8 @@ class FacialExpressionClassifier:
             file_pi2 = open(str(path) + "\\" + str(filename), 'rb')
             participant = pickle.load(file_pi2)
             print("Participant {0} is Loaded.".format(filename))
-            participants.append(participant)
+            if participant.number != 55:
+                participants.append(participant)
         # filehandler = open("participants.obj", 'wb')
         # pickle.dump(participants, filehandler)
         return participants
@@ -325,6 +403,7 @@ class FacialExpressionClassifier:
         #           |
         #      Bo=3 |   Fr=4
         #           |
+
 
 
         if datapoint.rate.challenge> 50+self.margin_for_challenge:
@@ -361,19 +440,30 @@ class FacialExpressionClassifier:
                 quadrant_label = "mr"
                 engagement_label = 'mr'
 
+        if datapoint.rate.challenge == 0 or datapoint.rate.engagement == 0:
+            quadrant_label = 'mr'
+            engagement_label = 'mr'
+            challenge_label = "mr"
+
         return quadrant_label, engagement_label, challenge_label
         #print("quad label is: ", self.quadrant_label)
 
     def test_parameters(self):
+        print("HERE")
         data_points = []
         for participant in self.participants:
             data_points.append(participant.data_points)
         for i in range(len(data_points)):
             for point in data_points[i]:
-                        try:
-                            fef.calcualate_facial_expression_parameters(point, 195)
-                        except(TypeError):
-                            print("Error in participant {0} and timestamp {1}.".format(point.participant_number, point.rate.timestamp))
+                        #try:
+                            #fef.calcualate_facial_expression_parameters(point, 195)
+                        if point.openface_object.snapshot_files_name !=[]:
+                            p_scale_avg, p_scale_std, rotation_avg, rotation_std, transition_avg,\
+                            transition_std, non_rigid_shape_parameters_avg, non_rigid_shape_parameters_std \
+                                = fef.calcualate_shape_parameters(point)
+                            print(p_scale_avg)
+                        #except(TypeError):
+                        #    print("Error in participant {0} and timestamp {1}.".format(point.participant_number, point.rate.timestamp))
 
     def logistic_regression_classifier(self, au_cr, quadrant_labels):
         print("Kernel Classifier")
@@ -413,3 +503,445 @@ class FacialExpressionClassifier:
         print("Predicted:", predicted)
         accuuracy = accuracy_score(real, predicted)
         print("Accuracy is: ", accuuracy)
+
+    def prepare_features(self,data_points):
+        eng_labels, chal_labels, quadrant_labels, au_cr, p_numbers = [], [], [], [], []
+        #if type(data_points)!= 'list':
+        #    data_points = [data_points]
+        for i in range(len(data_points)):
+            if type(data_points[i]) == 'list':
+                for j in range(len(data_points[i])):
+                    point = data_points[i][j]
+            else:
+                point = data_points[i]
+
+           # if hasattr(data_points[i], 'rate'):
+                #for point in data_points[i]:
+            quadrant_label, eng_label, chal_label = self.calculate_labels(point)
+            if eng_label != "mr":
+                if chal_label != "mr":
+                    try:
+                        tmp = []
+                        au_c_avg, au_c_std, au_r_avg, au_r_std = fef.calculate_action_units_parameters(point, 30)
+                        gaze_avg_movements, gaze_avg, gaze_std = fef.calculate_gaze_angle_parameters(point)
+                        avg_movement_head_pose, head_pose_avg, head_pose_std = fef.calculate_head_pose(point)
+                        avg_movement_pitch_roll_yaw, pitch_roll_yaw_avg, pitch_roll_yaw_std = fef.calculate_pitch_roll_yaw(
+                                point)
+                        avg_sadness_rate, std_sadness_rate, median_sadness_rate, avg_anger_rate, std_anger_rate, median_anger_rate \
+                                , avg_surprise_rate, std_surprise_rate, median_surprise_rate, avg_happines_rate, std_happiness_rate, \
+                                median_happiness_rate, avg_neutral_rate, std_neutral_rate, median_neutral_rate = \
+                                oef.calculate_omron_emotions_score_array_metric(point)
+
+                        avg_exp, max_a = oef.calculate_omron_expression_array_metric(point)
+
+                        p_scale_avg, p_scale_std, rotation_avg, rotation_std, transition_avg, transition_std, \
+                            non_rigid_shape_parameters_avg, non_rigid_shape_parameters_std = fef.calcualate_shape_parameters(point)
+
+                        print("MAMOOD MAMAMD")
+
+                        if sum(au_c_avg) == 0:
+                                abas = 1
+                        if len(au_c_avg) != 0 and sum(au_c_avg) != 0:
+                                eng_labels.append(eng_label)
+                                chal_labels.append(chal_label)
+
+                                quadrant_labels.append(quadrant_label)
+                                p_numbers.append(point.participant_number)
+                                tmp.extend(au_r_avg)
+                                tmp.extend(au_r_std)
+                                tmp.extend(au_c_avg)
+                                tmp.extend(au_c_std)
+
+                                tmp.extend(gaze_avg_movements)
+                                tmp.extend(gaze_avg)
+                                tmp.extend(gaze_std)
+
+                                tmp.extend(avg_movement_head_pose)
+                                tmp.extend(head_pose_avg)
+                                tmp.extend(head_pose_std)
+
+                                tmp.extend(avg_movement_pitch_roll_yaw)
+                                tmp.extend(pitch_roll_yaw_avg)
+                                tmp.extend(pitch_roll_yaw_std)
+
+                                    #OMRON FEATURES::
+
+                                omron_emotion_array = [avg_sadness_rate, std_sadness_rate, median_sadness_rate, avg_anger_rate, std_anger_rate, median_anger_rate \
+                                    , avg_surprise_rate, std_surprise_rate, median_surprise_rate, avg_happines_rate, std_happiness_rate, \
+                                    median_happiness_rate, avg_neutral_rate, std_neutral_rate, median_neutral_rate]
+
+                                tmp.extend(omron_emotion_array)
+                                tmp.extend(avg_exp)
+                                tmp.extend(max_a)
+                                tmp.extend(p_scale_avg)
+                                tmp.extend(p_scale_std)
+                                tmp.extend(rotation_std)
+                                tmp.extend(transition_avg)
+                                tmp.extend(transition_std)
+                                tmp.extend(non_rigid_shape_parameters_avg)
+                                tmp.extend(non_rigid_shape_parameters_std)
+                                au_cr.append(tmp)
+
+                    except(TypeError):
+                            print(TypeError)
+                            print("Error in participant {0} and timestamp {1}.".format(point.participant_number,
+                                                                                           point.rate.timestamp))
+        return au_cr, quadrant_labels, eng_labels, chal_labels, p_numbers
+
+    def xgboost_classifier_participant_based(self):
+        print("XGBOOST-Participant Based")
+        predicted_rf = []
+        real_rf = []
+
+        predicted_nb = []
+        real_nb = []
+
+        predicted_poly = []
+        real_poly = []
+
+        predicted_xgb = []
+        real_xgb = []
+
+        predicted_lsvm = []
+        real_lsvm = []
+
+        eng_labels = []
+        chal_labels = []
+        quadrant_labels = []
+        au_cr = []
+        data_points = []
+        train_dps = []
+        test_dps = []
+        for k in range(len(self.participants)):
+            for dp in self.participants[k].data_points:
+                if dp.rate.engagement != 0 and dp.rate.challenge != 0:
+                    data_points.append(dp)
+
+        au_cr, quadrant_labels, eng_labels, chal_labels, p_numbers = self.prepare_features(data_points)
+        #au_cr, quadrant_labels, eng_labels, chal_labels, p_numbers = self.sliding_windows_preparing_features()
+        #self.plot_pca_4_level(au_cr,quadrant_labels)
+        with open('au_cr.txt', 'w') as f:
+            for item in au_cr:
+                f.write("%s\n" % item)
+
+        #print(len(p_numbers))
+        #au_cr = normalize(au_cr, axis=0, norm='max')
+        for i in range(5 , 21):
+            #for participant in self.participants:
+            #participant_number = participant.number
+            #print("Participant_number: "+str(participant_number))
+            print("iteration " + str(i))
+            train_au_cr, train_quad_labels, train_eng_labels, train_chal_labels = [], [], [], []
+            test_au_cr, test_quad_labels, test_eng_labels, test_chal_labels = [], [], [], []
+            for j in range(len(p_numbers)):
+                if p_numbers[j] != i:
+                    train_au_cr.append(au_cr[j])
+                    train_chal_labels.append(chal_labels[j])
+                    train_eng_labels.append(eng_labels[j])
+                    train_quad_labels.append(quadrant_labels[j])
+                else:
+                    test_au_cr.append(au_cr[j])
+                    test_chal_labels.append(chal_labels[j])
+                    test_eng_labels.append(eng_labels[j])
+                    test_quad_labels.append(quadrant_labels[j])
+
+
+            X_train = train_au_cr
+            X_test = test_au_cr
+            y_train = train_quad_labels
+            y_test = test_quad_labels
+            #print("here")
+            if(len(y_test) != 0):
+                X_train = np.array(X_train)
+                X_test = np.array(X_test)
+                y_train = np.array(y_train)
+                y_test = np.array(y_test)
+
+                #smt = SMOTE()
+                #smt  = RandomOverSampler()
+                #X_train, y_train = smt.fit_sample(X_train, y_train)
+                #SVM = svm.SVC(gamma='scale')
+                #SVM.fit(X_train, y_train)
+                #pt = SVM.predict(X_test)
+                #X_train, X_test = self.pca_transformation(X_train, X_test)
+                #model = xgb.XGBClassifier(objective='multi:softmax', max_iter=3000).fit(X_train , y_train)
+                #model = KNeighborsClassifier(n_neighbors = number_of_neighbors)
+                #pt = model.predict(X_test)
+                #sc = StandardScaler()
+                #X_train = sc.fit_transform(X_train)
+                #X_test = sc.transform(X_test)
+
+                #X_train,quadrant_labels = self.feature_selection(X_train, quadrant_labels)
+
+
+                rf_model = RandomForestClassifier(n_estimators=500)
+                rf_model.fit(X_train, y_train)
+                rf_pt = rf_model.predict(X_test)
+                predicted_rf.extend(rf_pt)
+                real_rf.extend(y_test)
+
+                nb_model = GaussianNB()
+                nb_model.fit(X_train, y_train)
+                nb_pt = nb_model.predict(X_test)
+                predicted_nb.extend(nb_pt)
+                real_nb.extend(y_test)
+
+                xgb_model = xgb.XGBClassifier(objective='multi:softmax', max_iter=3000).fit(X_train, y_train)
+                xgb_pt = xgb_model.predict(X_test)
+                predicted_xgb.extend(xgb_pt)
+                real_xgb.extend(y_test)
+
+                SVM_linear = svm.LinearSVC(class_weight='balanced', max_iter=1000000)
+                SVM_linear.fit(X_train, y_train)
+                pt_lsvm = SVM_linear.predict(X_test)
+                predicted_lsvm.extend(pt_lsvm)
+                real_lsvm.extend(y_test)
+
+                SVM_poly = svm.SVC(kernel='poly', degree=2, gamma='scale', max_iter=3000, class_weight='balanced')
+                SVM_poly.fit(X_train, y_train)
+                pt_poly = SVM_poly.predict(X_test)
+                predicted_poly.extend(pt_poly)
+                real_poly.extend(y_test)
+
+
+
+
+
+
+        print("------------RANDOM FOREST-------")
+        print(classification_report(real_rf, predicted_rf))
+        print("Other Metrics: \n")
+        print(confusion_matrix(real_rf, predicted_rf))
+        print("Y:", real_rf)
+        print("Predicted:", predicted_rf)
+        accuuracy = accuracy_score(real_rf, predicted_rf)
+        print("Accuracy is: ", accuuracy)
+
+        print("------------NAIVE BAYES-------")
+        print(classification_report(real_nb, predicted_nb))
+        print("Other Metrics: \n")
+        print(confusion_matrix(real_nb, predicted_nb))
+        print("Y:", real_nb)
+        print("Predicted:", predicted_nb)
+        accuuracy = accuracy_score(real_nb, predicted_nb)
+        print("Accuracy is: ", accuuracy)
+
+        print("------------ XGB -------")
+        print(classification_report(real_xgb, predicted_xgb))
+        print("Other Metrics: \n")
+        print(confusion_matrix(real_xgb, predicted_xgb))
+        print("Y:", real_xgb)
+        print("Predicted:", predicted_xgb)
+        accuuracy = accuracy_score(real_xgb, predicted_xgb)
+        print("Accuracy is: ", accuuracy)
+
+        print("------------ LSVM -------")
+        print(classification_report(real_lsvm, predicted_lsvm))
+        print("Other Metrics: \n")
+        print(confusion_matrix(real_lsvm, predicted_lsvm))
+        print("Y:", real_lsvm)
+        print("Predicted:", predicted_lsvm)
+        accuuracy = accuracy_score(real_lsvm, predicted_lsvm)
+        print("Accuracy is: ", accuuracy)
+
+        print("------------ Poly SVM -------")
+        print(classification_report(real_poly, predicted_poly))
+        print("Other Metrics: \n")
+        print(confusion_matrix(real_poly, predicted_poly))
+        print("Y:", real_poly)
+        print("Predicted:", predicted_poly)
+        accuuracy = accuracy_score(real_poly, predicted_poly)
+        print("Accuracy is: ", accuuracy)
+
+    def knn_classifier_participant_based(self):
+        print("KNN-Participant Based")
+        predicted = []
+        real = []
+        eng_labels = []
+        chal_labels = []
+        quadrant_labels = []
+        au_cr = []
+        data_points = []
+        train_dps = []
+        test_dps = []
+        for k in range(len(self.participants)):
+            for dp in self.participants[k].data_points:
+                if dp.rate.engagement != 0 and dp.rate.challenge != 0:
+                    data_points.append(dp)
+
+        #au_cr, quadrant_labels, eng_labels, chal_labels, p_numbers = self.prepare_features(data_points)
+        au_cr, quadrant_labels, eng_labels, chal_labels, p_numbers = self.sliding_windows_preparing_features()
+
+
+        #au_cr = normalize(au_cr, axis=0, norm='max')
+        #scaler = StandardScaler()
+        #au_cr = scaler.fit_transform(au_cr)
+        for number_of_neighbors in range(1,11):
+            predicted = []
+            real = []
+            for i in range(5 , 21):
+                #for participant in self.participants:
+                #participant_number = participant.number
+                #print("Participant_number: "+str(participant_number))
+                #print("iteration " + str(i))
+                train_au_cr, train_quad_labels, train_eng_labels, train_chal_labels = [], [], [], []
+                test_au_cr, test_quad_labels, test_eng_labels, test_chal_labels = [], [], [], []
+                for j in range(len(p_numbers)):
+                    if p_numbers[j] != i:
+                        train_au_cr.append(au_cr[j])
+                        train_chal_labels.append(chal_labels[j])
+                        train_eng_labels.append(eng_labels[j])
+                        train_quad_labels.append(quadrant_labels[j])
+                    else:
+                        test_au_cr.append(au_cr[j])
+                        test_chal_labels.append(chal_labels[j])
+                        test_eng_labels.append(eng_labels[j])
+                        test_quad_labels.append(quadrant_labels[j])
+
+
+                X_train = train_au_cr
+                X_test = test_au_cr
+                y_train = train_quad_labels
+                y_test = test_quad_labels
+                #print("here")
+                if(len(y_test) != 0):
+                    X_train = np.array(X_train)
+                    X_test = np.array(X_test)
+                    y_train = np.array(y_train)
+                    y_test = np.array(y_test)
+                    #X_train, X_test = self.pca_transformation(X_train, X_test)
+                    smt = RandomOverSampler()
+                    #smt = SMOTE()
+                    #X_train, y_train = smt.fit_sample(X_train, y_train)
+                    #SVM = svm.SVC(gamma='scale', class_weight='balanced')
+                    #SVM.fit(X_train, y_train)
+                    #pt = SVM.predict(X_test)
+                    X_train, X_test = self.pca_transformation(X_train, X_test)
+                    #model = xgb.XGBClassifier(objective='multi:softmax', max_iter=3000).fit(X_train , y_train)
+                    model = KNeighborsClassifier(n_neighbors=number_of_neighbors)
+                    model.fit(X_train, y_train)
+                    pt = model.predict(X_test)
+                    predicted.extend(pt)
+                    real.extend(y_test)
+                    mid_accuuracy = accuracy_score(y_test, pt)
+                    print("Mid-accuaracy is {0}, y_test is {1} ".format(mid_accuuracy, y_test))
+
+            #print("Y:", real)
+            #print("Predicted:", predicted)
+            accuuracy = accuracy_score(real, predicted)
+            #auc_score = roc_auc_score(real, predicted)
+            #print("auc_score is: ", auc_score)
+            print("Accuracy is: ", accuuracy)
+            print(" K is : "+str(number_of_neighbors))
+            print(classification_report(real, predicted))
+            print("Other Metrics: \n")
+            print(confusion_matrix(real, predicted))
+
+    def sliding_windows_preparing_features(self):
+        p_au_cr, p_quadrant_labels, p_eng_labels, p_chal_labels, p_p_numbers =[],[],[],[],[]
+        not_set_yet = True
+        for i in range(len(self.participants)):
+            for j in range(i, len(self.participants)):
+                if i != j:
+                    if self.participants[i].number == self.participants[j].number:
+                        au_cr, quadrant_labels, eng_labels, chal_labels, p_numbers = \
+                            self.sliding_windows_mixing_datapoints(self.participants[i], self.participants[j])
+                        au_cr = numpy.array(au_cr)
+                        quadrant_labels = numpy.array(quadrant_labels)
+                        eng_labels = numpy.array(eng_labels)
+                        chal_labels = numpy.array(chal_labels)
+                        p_numbers = numpy.array(p_numbers)
+                        if not_set_yet:
+                            if(len(au_cr)>0):
+                                p_au_cr = au_cr
+                                p_quadrant_labels = quadrant_labels
+                                p_eng_labels = eng_labels
+                                p_chal_labels = chal_labels
+                                p_p_numbers = p_numbers
+                                not_set_yet = False
+                        else:
+                            if(len(au_cr) > 0):
+                                p_au_cr = np.concatenate((p_au_cr, au_cr), axis=0)
+                                p_quadrant_labels = np.concatenate((p_quadrant_labels, quadrant_labels))
+                                p_eng_labels = np.concatenate((p_eng_labels, eng_labels))
+                                p_chal_labels = np.concatenate((p_chal_labels, chal_labels))
+                                p_p_numbers = np.concatenate((p_p_numbers, p_numbers))
+        return p_au_cr, p_quadrant_labels, p_eng_labels, p_chal_labels, p_p_numbers
+
+    def sliding_windows_mixing_datapoints(self, participant_1,participant_2):
+        au_cr,quadrant_labels, eng_labels, chal_labels, p_numbers = [],[],[],[],[]
+        for i in range(len(participant_1.data_points)):
+            for j in range(len(participant_2.data_points)):
+                if participant_1.data_points[i].rate.timestamp == participant_2.data_points[j].rate.timestamp:
+
+                    au_cr_1, quadrant_label, eng_label, chal_label, p_number = self.prepare_features(participant_1.data_points[i])
+                    au_cr_2, quadrant_label, eng_label, chal_label, p_number = self.prepare_features(participant_2.data_points[j])
+                    if len(au_cr_1) > 0 and len(au_cr_2) > 0:
+                        au_cr_2 = np.array(au_cr_2)
+                        au_cr_1 = np.array(au_cr_1)
+                        au_cr_2 = au_cr_2.flatten()
+                        au_cr_1 = au_cr_1.flatten()
+                        tmp_au_cr = [*au_cr_1, *au_cr_2]
+                        tmp_au_cr = np.array(tmp_au_cr)
+                        au_cr.append(tmp_au_cr)
+                        quadrant_labels.append(quadrant_label)
+                        eng_labels.append(eng_label)
+                        chal_labels.append(chal_label)
+                        p_numbers.append(p_number)
+        return au_cr, quadrant_labels, eng_labels, chal_labels, p_numbers
+
+    def plot_pca_4_level(self, au_cr, labels):
+        au_cr, x = self.pca_transformation(au_cr, au_cr)
+        ro = []
+        fo = []
+        bo = []
+        fr = []
+        print(labels)
+        for i in range(len(labels)):
+            if (labels[i] == 1):
+                ro.append(au_cr[i])
+            if (labels[i] == 2):
+                fo.append(au_cr[i])
+            if (labels[i] == 3):
+                bo.append(au_cr[i])
+            if (labels[i] == 4):
+                fr.append(au_cr[i])
+
+        ro = numpy.array(ro)
+        print("ABAS : " + str(len(ro[1])))
+        fo = numpy.array(fo)
+        bo = numpy.array(bo)
+        fr = numpy.array(fr)
+        plt.scatter(ro[:, 0], ro[:, 1], c="red", label='Rote')
+        plt.scatter(fo[:, 0], fo[:, 1], c="green", label='Focus')
+        plt.scatter(bo[:, 0], bo[:, 1], c="blue", label='Bored')
+        plt.scatter(fr[:, 0], fr[:, 1], c="yellow", label='Frustrated')
+        plt.legend()
+        plt.show()
+
+    def feature_selection(self,au_cr, eng_labels):
+        #data_points = []
+        #for k in range(len(self.participants)):
+         #   for dp in self.participants[k].data_points:
+         #       data_points.append(dp)
+
+            # au_cr, eng_labels, p_numbers = self.prepare_features_for_engagement(data_points)
+        #au_cr, eng_labels, p_numbers = self.sliding_windows_preparing_features()
+        #au_cr = self.pca_transformation(au_cr, eng_labels)
+        #model = svm.LinearSVC(class_weight='balanced', max_iter=1000000)
+        #rfe = RFE(model, 30)
+        #fit = rfe.fit(au_cr, eng_labels)
+        #print("Num Features: %s" % (fit.n_features_))
+        #print("Selected Features: %s" % (fit.support_))
+        #print("Feature Ranking: %s" % (fit.ranking_))
+        #x = fit.support_
+        #au_cr = numpy.array(au_cr)
+        #for i in range(len(x)):
+        #    if x[len(x)-i-1] == False:
+        #        au_cr = np.delete(au_cr, 1, axis=1)
+        au_cr = SelectKBest(score_func=f_regression, k=40).fit_transform(au_cr, eng_labels)
+        #X_new.shape
+        return au_cr,eng_labels
+
+
+

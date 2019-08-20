@@ -9,7 +9,7 @@ from termcolor import colored
 
 class Openface:
 
-    def __init__(self, rate, path_of_frames, participant_number, to_mini_points=False):
+    def __init__(self, rate, path_of_frames, participant_number, to_mini_points=False, ):
         print("openface object is created...")
         self.participant_number = participant_number
         self.path_of_frames = path_of_frames
@@ -33,7 +33,8 @@ class Openface:
         self.non_rigid_shape_parameters_array = []
         self.snapshot_files_name = []
         self.snapshot_files_timestamp = []
-        self.set_frame_name_and_timestamp()
+        if not to_mini_points:
+            self.set_frame_name_and_timestamp()
         self.dst_dir = "Y:\\Openface_Processed_Frames\\Folder_of_CSVs"+"\\"+str(participant_number)
         self.csv_path = ""
         if not to_mini_points:

@@ -1,5 +1,4 @@
-import  numpy as np
-
+import numpy as np
 
 def calculate_gaze_angle_parameters(point):
     #print("In Calculating gaze Aneles")
@@ -137,3 +136,37 @@ def calculate_head_pose(point):
 
 
     return avg_movement_head_pose, head_pose_avg, head_pose_std
+
+def calcualate_shape_parameters(point):
+    print("JERE")
+    p_scale_avg, p_scale_std, rotation_avg, rotation_std,\
+    transition_avg, transition_std, non_rigid_shape_parameters_avg,\
+    non_rigid_shape_parameters_std = [],[],[],[],[],[],[],[]
+
+    if (point !=None):
+        if hasattr(point.openface_object, 'p_scale_array'):
+            p_scale = point.openface_object.p_scale_array
+            print(p_scale)
+            rotation = point.openface_object.rotation_array
+            transition = point.openface_object.transition_array
+            non_rigid_shape_parameters = point.openface_object.non_rigid_shape_parameters_array
+
+            p_scale = np.array(p_scale)
+            rotation = np.array(rotation)
+            transition = np.array(transition)
+            non_rigid_shape_parameters = np.array(non_rigid_shape_parameters)
+
+            p_scale_avg = p_scale.mean(axis=0)
+            p_scale_std = p_scale.std(axis=0)
+
+            rotation_avg = rotation.mean(axis=0)
+            rotation_std = rotation.std(axis=0)
+
+            transition_avg = transition.mean(axis=0)
+            transition_std = transition.std(axis=0)
+
+            non_rigid_shape_parameters_avg = non_rigid_shape_parameters.mean(axis=0)
+            non_rigid_shape_parameters_std = non_rigid_shape_parameters.std(axis=0)
+
+            print("P_SCALE_AVG : ",p_scale_avg)
+            return p_scale_avg, p_scale_std, rotation_avg, rotation_std, transition_avg, transition_std, non_rigid_shape_parameters_avg, non_rigid_shape_parameters_std
